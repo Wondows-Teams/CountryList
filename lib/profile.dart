@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 
 class MyProfile extends StatefulWidget {
 
@@ -21,7 +22,12 @@ class _MyProfile extends State<MyProfile>{
           const Text(
             'Welcome to your profile',
           ),
-
+          Spacer(),
+          ProfilePicture(
+              name: "Pipe",
+              radius: 100,
+              fontsize: 100),
+          Spacer(),
         ],
       ),
     );
