@@ -1,4 +1,7 @@
+import 'package:countrylist/profile.dart';
+import 'package:countrylist/top.dart';
 import 'package:flutter/material.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -24,44 +27,87 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: MyMain(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyMain extends StatefulWidget {
 
-  MyHomePage({super.key});
+
+  MyMain({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyMain> createState() => _MyMain();
 
+}
+
+class _MyMain extends State<MyMain> {
+
+  int index = 1;
+  var scenes = [
+    MyTop(),
+    MyHomePage(),
+    MyProfile(),
+  ];
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
 
-        title: Text("Menu Drawer"),
+        title: Text("My Country List"),
       ),
       drawer: CustomDrawer(),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+      body: scenes[index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        onTap: (index) => setState(() => this.index = index),
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              label: "Best"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Profile"
+          ),
+        ],
       ),
     );
   }
 }
 
+
+class MyHomePage extends StatefulWidget {
+
+
+  @override
+  State<MyHomePage> createState() => _MyHomePage();
+}
+
+class _MyHomePage extends State<MyHomePage>{
+
+
+  @override
+  Widget build (BuildContext context){
+    return Center(
+      // Center is a layout widget. It takes a single child and positions it
+      // in the middle of the parent.
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Text(
+            'You are in the main menu',
+          ),
+        ],
+      ),
+    );
+  }
+}
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
 
