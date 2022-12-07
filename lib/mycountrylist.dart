@@ -11,7 +11,6 @@ class MyCountryList extends StatefulWidget {
 
 class _MyCountryList extends State<MyCountryList>{
 
-  var tabScreens = [];
   void toEditScreen(){
 
   }
