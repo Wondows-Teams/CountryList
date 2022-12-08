@@ -30,34 +30,28 @@ class ListaPaises extends StatefulWidget {
 }
 
 class _listaPaises extends State<ListaPaises>{
-  late ScrollController controller = ScrollController();
-  late List<Future<List<Pais>>> paises = [];
-  int numPag = 0;
+  //late ScrollController controller = ScrollController();
+  late Future<List<Pais>> paises;
+  //int numPag = 0;
 
   @override
   void initState() {
     super.initState();
-    controller.addListener((){
-      if(controller.position.pixels == controller.position.maxScrollExtent){
-        _fetchPaises(numPag);
-      }
-    });
+    //controller.addListener((){
+      //if(controller.position.pixels == controller.position.maxScrollExtent){
+        //_fetchPaises(numPag);
+      //
+    //});
     // Realiza una llamada a la API al inicializar el componente
-    _fetchPaises(numPag);
+    _fetchPaises();
   }
 
-  _fetchPaises(int n) async {
-    Future<List<Pais>> PaisList = PaisHttpService().getPaises(n);
+  _fetchPaises() async {
+    Future<List<Pais>> PaisList = PaisHttpService().getPaises();
     // Actualizamos la lista de películas en el estado del componente
     setState(() {
-      paises.add(PaisList);
+      paises = PaisList;
     });
-    numPag++;
-  }
-
-  Future<PaisDetail> _obtainPaisDetail(String codePais) async {
-    Future<PaisDetail> Detalles = PaisHttpService().getPaisDetail(codePais);
-    return Detalles;
   }
 
   Widget build(BuildContext context) {
@@ -65,29 +59,18 @@ class _listaPaises extends State<ListaPaises>{
         appBar: AppBar(
           title: Text("Holw ewns"),
         ),
-        body: ListView.builder(
-          controller: controller,
-          itemCount: paises.length,
-          itemBuilder: (context, index) {
-
-            return FutureBuilder(
-              future: paises[index],
+        body: FutureBuilder(
+              future: paises,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return listViewPaises(snapshot.data);
-
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
-
-                // By default, show a loading spinner.
-                return Center(
+                  return Center(
                     child: CircularProgressIndicator());
               },
-            );
-
-            },
-        )
+            )
     );
   }
 
@@ -97,7 +80,7 @@ class _listaPaises extends State<ListaPaises>{
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: paises!.length,
 
         itemBuilder: (context, index) {
           return Card(
@@ -108,19 +91,7 @@ class _listaPaises extends State<ListaPaises>{
             child: Column(
               children: [
                 // agrega una imagen que ocupa toda la anchura de la tarjeta
-                FutureBuilder(
-                    future: _obtainPaisDetail(paises![index].code),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                      return Text(snapshot.data!.data.capital);
-                      } else if (snapshot.hasError) {
-                      return Text("${snapshot.error}");
-                      }
-                      // By default, show a loading spinner.
-                      return Center(
-                      child: CircularProgressIndicator());
-                      },
-                ),
+                Image.network(paises![index].flag),
                 // agrega un contenedor para mostrar el nombre del país
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
