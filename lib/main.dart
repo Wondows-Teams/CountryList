@@ -1,95 +1,154 @@
+import 'dart:convert';
+
+import 'package:countrylist/Pais.dart';
+import 'package:countrylist/PaisDetail.dart';
+import 'package:countrylist/PaisHttpService.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: ListaPaises(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class ListaPaises extends StatefulWidget {
+  State<ListaPaises> createState() => _listaPaises();
+}
 
-  MyHomePage({super.key});
+class _listaPaises extends State<ListaPaises>{
+  late ScrollController controller = ScrollController();
+  late List<Future<List<Pais>>> paises = [];
+  int numPag = 0;
 
   @override
+  void initState() {
+    super.initState();
+    controller.addListener((){
+      if(controller.position.pixels == controller.position.maxScrollExtent){
+        _fetchPaises(numPag);
+      }
+    });
+    // Realiza una llamada a la API al inicializar el componente
+    _fetchPaises(numPag);
+  }
+
+  _fetchPaises(int n) async {
+    Future<List<Pais>> PaisList = PaisHttpService().getPaises(n);
+    // Actualizamos la lista de películas en el estado del componente
+    setState(() {
+      paises.add(PaisList);
+    });
+    numPag++;
+  }
+
+  Future<PaisDetail> _obtainPaisDetail(String codePais) async {
+    Future<PaisDetail> Detalles = PaisHttpService().getPaisDetail(codePais);
+    return Detalles;
+  }
+
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-
-        title: Text("Menu Drawer"),
-      ),
-      drawer: CustomDrawer(),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        appBar: AppBar(
+          title: Text("Holw ewns"),
         ),
-      ),
+        body: ListView.builder(
+          controller: controller,
+          itemCount: paises.length,
+          itemBuilder: (context, index) {
+
+            return FutureBuilder(
+              future: paises[index],
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return listViewPaises(snapshot.data);
+
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+
+                // By default, show a loading spinner.
+                return Center(
+                    child: CircularProgressIndicator());
+              },
+            );
+
+            },
+        )
     );
   }
-}
 
-class CustomDrawer extends StatelessWidget {
-  CustomDrawer({super.key});
+  ListView listViewPaises(List<Pais>? paises){
 
-  void navegacioncita(){
 
-  }
-  @override
-  Widget build(BuildContext context){
-    return Drawer(
-      child: ListView(
-        children: [
-          ListTile(
-            leading: Icon(Icons.home),
-            title: Text("Menu Principal"),
-            onTap: (){},
-          ),
-          ListTile(
-            leading: Icon(Icons.analytics),
-            title: Text("Estadísticas"),
-            onTap: (){},
-          ),
-          ListTile(
-            leading: Icon(Icons.beenhere),
-            title: Text("Insignias"),
-            onTap: (){},
-          ),
-        ],
-        ),
-    );
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          shrinkWrap: true,
+          itemCount: 5,
+
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 5, // agrega una sombra debajo de la tarjeta
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10), // redondea los bordes de la tarjeta
+            ),
+            child: Column(
+              children: [
+                // agrega una imagen que ocupa toda la anchura de la tarjeta
+                FutureBuilder(
+                    future: _obtainPaisDetail(paises![index].code),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                      return Text(snapshot.data!.data.capital);
+                      } else if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                      }
+                      // By default, show a loading spinner.
+                      return Center(
+                      child: CircularProgressIndicator());
+                      },
+                ),
+                // agrega un contenedor para mostrar el nombre del país
+                Container(
+                  padding: EdgeInsets.all(10), // agrega padding al contenedor
+                  child: Text(
+                    paises![index].name,
+                    style: TextStyle(
+                      fontSize: 20, // agrega un tamaño de fuente de 20 puntos
+                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                      color: Colors.blue, // agrega un color azul para el texto
+                    ),
+                  ),
+                ),
+                // agrega un contenedor para mostrar la puntuación del país
+                Container(
+                  padding: EdgeInsets.all(10), // agrega padding al contenedor
+                  child: Text(
+                    "10",
+                    style: TextStyle(
+                      fontSize: 18, // agrega un tamaño de fuente de 18 puntos
+                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                      color: Colors.green, // agrega un color verde para el texto
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+          },
+        ); // Listview
   }
 }
