@@ -5,10 +5,10 @@
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<Pais> paisFromJson(String str) => List<Pais>.from(json.decode(str).map((x) => Pais.fromJson(x)));
+List<PaisAPI> paisFromJson(String str) => List<PaisAPI>.from(json.decode(str).map((x) => PaisAPI.fromJson(x)));
 
-class Pais {
-  Pais({
+class PaisAPI {
+  PaisAPI({
     required this.name,
     required this.topLevelDomain,
     required this.alpha2Code,
@@ -64,7 +64,7 @@ class Pais {
   bool? independent;
   double? gini;
 
-  factory Pais.fromJson(Map<String, dynamic> json) => Pais(
+  factory PaisAPI.fromJson(Map<String, dynamic> json) => PaisAPI(
     name: json["name"],
     topLevelDomain: List<String>.from(json["topLevelDomain"].map((x) => x)),
     alpha2Code: json["alpha2Code"],

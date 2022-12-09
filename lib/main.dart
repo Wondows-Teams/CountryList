@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:countrylist/Pais.dart';
+import 'package:countrylist/PaisAPI.dart';
 import 'package:countrylist/PaisDetail.dart';
 import 'package:countrylist/PaisHttpService.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class ListaPaises extends StatefulWidget {
 
 class _listaPaises extends State<ListaPaises>{
   //late ScrollController controller = ScrollController();
-  late Future<List<Pais>> paises;
+  late Future<List<PaisAPI>> paises;
   //int numPag = 0;
   String busqueda = "";
 
@@ -48,10 +48,16 @@ class _listaPaises extends State<ListaPaises>{
   }
 
   _fetchPaises() async {
-    Future<List<Pais>> PaisList = PaisHttpService().getPaises();
+    Future<List<PaisAPI>> PaisList = PaisHttpService().getPaises();
     // Actualizamos la lista de películas en el estado del componente
     setState(() {
       paises = PaisList;
+    });
+  }
+  
+  actualizarBusqueda(String b){
+    setState(() {
+      busqueda = b;
     });
   }
 
@@ -60,28 +66,44 @@ class _listaPaises extends State<ListaPaises>{
         appBar: AppBar(
           title: Text("Holw ewns"),
         ),
-        body: FutureBuilder(
-              future: paises,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return listViewPaises(snapshot.data);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
+        body: SingleChildScrollView(
+          child:  Column(
+            children: [
+              TextField(
+                onSubmitted: (value) {
+                  actualizarBusqueda(value);
+                },
+              ),
+              FutureBuilder(
+                future: paises,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return listViewPaises(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
                   return Center(
-                    child: CircularProgressIndicator());
-              },
-            )
+                      child: CircularProgressIndicator());
+                },
+              )
+            ],
+          ),
+        )
     );
   }
 
-  ListView listViewPaises(List<Pais>? paises){
+  ListView listViewPaises(List<PaisAPI>? paises){
 
+    List<PaisAPI> auxList = paises!.where((element) => element.name.toUpperCase().startsWith(busqueda.toUpperCase())).toList();
+        if(auxList.length <= 0) return ListView.builder(itemCount: 1,itemBuilder: (context, index) {
+          return Text("No se han encontrado países que cumplan los requisitos");
+        },
+        );
 
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: paises!.length,
+          itemCount: auxList.length,
 
         itemBuilder: (context, index) {
           return Card(
@@ -92,12 +114,12 @@ class _listaPaises extends State<ListaPaises>{
             child: Column(
               children: [
                 // agrega una imagen que ocupa toda la anchura de la tarjeta
-                SvgPicture.network(paises![index].flag),
+                SvgPicture.network(auxList[index].flag),
                 // agrega un contenedor para mostrar el nombre del país
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
                   child: Text(
-                    paises![index].name,
+                    auxList[index].name,
                     style: TextStyle(
                       fontSize: 20, // agrega un tamaño de fuente de 20 puntos
                       fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
@@ -106,7 +128,7 @@ class _listaPaises extends State<ListaPaises>{
                   ),
                 ),
                 // agrega un contenedor para mostrar la puntuación del país
-                Text("Poblacion: " + paises![index].population.toString()),
+                Text("Poblacion: " + auxList[index].population.toString()),
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
                   child: Text(
