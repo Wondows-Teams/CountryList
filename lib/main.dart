@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:countrylist/Pais.dart';
 import 'package:countrylist/PaisDetail.dart';
 import 'package:countrylist/PaisHttpService.dart';
@@ -33,6 +33,7 @@ class _listaPaises extends State<ListaPaises>{
   //late ScrollController controller = ScrollController();
   late Future<List<Pais>> paises;
   //int numPag = 0;
+  String busqueda = "";
 
   @override
   void initState() {
@@ -91,7 +92,7 @@ class _listaPaises extends State<ListaPaises>{
             child: Column(
               children: [
                 // agrega una imagen que ocupa toda la anchura de la tarjeta
-                Image.network(paises![index].flag),
+                SvgPicture.network(paises![index].flag),
                 // agrega un contenedor para mostrar el nombre del país
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
@@ -105,6 +106,7 @@ class _listaPaises extends State<ListaPaises>{
                   ),
                 ),
                 // agrega un contenedor para mostrar la puntuación del país
+                Text("Poblacion: " + paises![index].population.toString()),
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
                   child: Text(
