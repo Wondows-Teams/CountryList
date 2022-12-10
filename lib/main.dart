@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:countrylist/PaisAPI.dart';
-import 'package:countrylist/PaisDetail.dart';
 import 'package:countrylist/PaisHttpService.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,30 +15,26 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ListaPaises(),
+      home: ListaPaises(["ESP", "BR", "AFG"]),
     );
   }
 }
 
 class ListaPaises extends StatefulWidget {
+  late final List<String> codPaisesFiltro;
+  ListaPaises(List<String> list){
+    codPaisesFiltro = list;
+  }
   State<ListaPaises> createState() => _listaPaises();
 }
 
 class _listaPaises extends State<ListaPaises>{
-  //late ScrollController controller = ScrollController();
   late Future<List<PaisAPI>> paises;
-  //int numPag = 0;
   String busqueda = "";
 
   @override
   void initState() {
     super.initState();
-    //controller.addListener((){
-      //if(controller.position.pixels == controller.position.maxScrollExtent){
-        //_fetchPaises(numPag);
-      //
-    //});
-    // Realiza una llamada a la API al inicializar el componente
     _fetchPaises();
   }
 
@@ -66,39 +57,54 @@ class _listaPaises extends State<ListaPaises>{
         appBar: AppBar(
           title: Text("Holw ewns"),
         ),
-        body: SingleChildScrollView(
-          child:  Column(
+        body: Column(
             children: [
-              TextField(
-                onSubmitted: (value) {
-                  actualizarBusqueda(value);
-                },
+                TextField(
+                  onSubmitted: (value) {
+                    actualizarBusqueda(value);
+                  },
+                decoration: InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                ),),
+              Expanded(
+                  child: FutureBuilder(
+                    future: paises,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return listViewPaises(snapshot.data, widget.codPaisesFiltro);
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      return Center(
+                          child: CircularProgressIndicator());
+                    },
+                  )
               ),
-              FutureBuilder(
-                future: paises,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return listViewPaises(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return Center(
-                      child: CircularProgressIndicator());
-                },
-              )
+
             ],
           ),
-        )
+
     );
   }
 
-  ListView listViewPaises(List<PaisAPI>? paises){
+  ListView listViewPaises(List<PaisAPI>? paises, List<String> _codPaisesFiltro){
 
-    List<PaisAPI> auxList = paises!.where((element) => element.name.toUpperCase().startsWith(busqueda.toUpperCase())).toList();
-        if(auxList.length <= 0) return ListView.builder(itemCount: 1,itemBuilder: (context, index) {
-          return Text("No se han encontrado países que cumplan los requisitos");
-        },
-        );
+    //aplicamos el filtro de países de la lista
+    List<PaisAPI> auxList = paises!.where((element) => _codPaisesFiltro.contains(element.alpha3Code!)).toList();
+
+
+    //aplicamos el filtro del campo de busqueda
+     auxList = auxList.where((element) => element.name.toUpperCase().startsWith(busqueda.toUpperCase())).toList();
+        if(auxList.length <= 0){
+          return ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return Text("No se han encontrado países que cumplan los requisitos");
+            },
+          );
+        }
 
         return ListView.builder(
           scrollDirection: Axis.vertical,
@@ -114,7 +120,7 @@ class _listaPaises extends State<ListaPaises>{
             child: Column(
               children: [
                 // agrega una imagen que ocupa toda la anchura de la tarjeta
-                SvgPicture.network(auxList[index].flag),
+                Image.network(auxList[index].flags.png!, height: 100,width: 100,),
                 // agrega un contenedor para mostrar el nombre del país
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
@@ -146,4 +152,5 @@ class _listaPaises extends State<ListaPaises>{
           },
         ); // Listview
   }
+
 }
