@@ -147,7 +147,7 @@ class _listaPaises extends State<ListaPaises>{
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
                   child: Text(
-                    "10",
+                    rating(auxList[index].alpha3Code!),
                     style: TextStyle(
                       fontSize: 18, // agrega un tamaño de fuente de 18 puntos
                       fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
@@ -160,6 +160,17 @@ class _listaPaises extends State<ListaPaises>{
           );
           },
         ); // Listview
+  }
+
+  String rating(String codigo){
+    int rating = 0;
+    PaisDatabase bbdd = PaisDatabase.instance;
+    bbdd.read(codigo, "ranking").then(
+            (value) {
+          rating = value.ranking;
+        }
+    );
+    return rating.toString();
   }
 
 }
