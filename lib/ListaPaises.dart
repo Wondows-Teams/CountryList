@@ -2,11 +2,7 @@ import 'package:countrylist/PaisAPI.dart';
 import 'package:countrylist/PaisHttpService.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class ListaPaisesPrincipal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
