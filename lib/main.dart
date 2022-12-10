@@ -15,15 +15,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ListaPaises(["ESP", "BR", "AFG"]),
+      home: ListaPaises(["ESP", "BR", "AFG"], false),
     );
   }
 }
 
 class ListaPaises extends StatefulWidget {
   late final List<String> codPaisesFiltro;
-  ListaPaises(List<String> list){
+  late final bool filtroActivo;
+  ListaPaises(List<String> list, bool activo){
     codPaisesFiltro = list;
+    filtroActivo = activo;
   }
   State<ListaPaises> createState() => _listaPaises();
 }
@@ -71,7 +73,7 @@ class _listaPaises extends State<ListaPaises>{
                     future: paises,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return listViewPaises(snapshot.data, widget.codPaisesFiltro);
+                        return listViewPaises(snapshot.data, widget.codPaisesFiltro, widget.filtroActivo);
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
                       }
@@ -87,11 +89,13 @@ class _listaPaises extends State<ListaPaises>{
     );
   }
 
-  ListView listViewPaises(List<PaisAPI>? paises, List<String> _codPaisesFiltro){
+  ListView listViewPaises(List<PaisAPI>? paises, List<String> _codPaisesFiltro, bool _filtroActivo){
+    List<PaisAPI> auxList = paises!;
 
-    //aplicamos el filtro de países de la lista
-    List<PaisAPI> auxList = paises!.where((element) => _codPaisesFiltro.contains(element.alpha3Code!)).toList();
-
+    //aplicamos el filtro de países de la lista si está activo
+    if(_filtroActivo){
+      auxList = auxList.where((element) => _codPaisesFiltro.contains(element.alpha3Code!)).toList();
+    }
 
     //aplicamos el filtro del campo de busqueda
      auxList = auxList.where((element) => element.name.toUpperCase().startsWith(busqueda.toUpperCase())).toList();
