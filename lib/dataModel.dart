@@ -2,6 +2,9 @@
 final String paisesFavs = 'favs';
 final String paisesVisitados = 'visited';
 final String paisesPlan = 'planned';
+final String paisesNoVisitados = 'notVisited';
+final String paisesRanking = 'ranking';
+
 
 ///Guarda el string con el nombre de los atributos que usará SQLite en las columnas
 class atributosPais{
