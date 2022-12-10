@@ -41,7 +41,10 @@ class _listaPaises extends State<ListaPaises>{
     bbdd.create(Pais(ranking: 5, code: "BRA"), "planned");
     bbdd.create(Pais(ranking: 5, code: "JPN"), "visited");
     bbdd.create(Pais(ranking: 5, code: "JAM"), "visited");
-    bbdd.create(Pais(ranking: 5, code: "JEY"), "notVisit");
+    bbdd.create(Pais(ranking: 5, code: "JEY"), "notVisited");
+    bbdd.create(Pais(ranking: 10, code: "ESP"), paisesRanking);
+    bbdd.create(Pais(ranking: 0, code: "FRA"), paisesRanking);
+    bbdd.create(Pais(ranking: 6, code: "JEY"), paisesRanking);
     bbdd.read("ESP", "favs").then((value) => debugPrint(value.ranking.toString()));
   }
 
@@ -146,14 +149,25 @@ class _listaPaises extends State<ListaPaises>{
                 Text("Poblacion: " + auxList[index].population.toString()),
                 Container(
                   padding: EdgeInsets.all(10), // agrega padding al contenedor
-                  child: Text(
-                    rating(auxList[index].alpha3Code!),
-                    style: TextStyle(
-                      fontSize: 18, // agrega un tamaño de fuente de 18 puntos
-                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                      color: Colors.green, // agrega un color verde para el texto
-                    ),
-                  ),
+                  child: FutureBuilder(
+                      future: rating(auxList[index].alpha3Code!),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                        snapshot.data!,
+                        style: TextStyle(
+                        fontSize: 18, // agrega un tamaño de fuente de 18 puntos
+                        fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                        color: Colors.green, // agrega un color verde para el texto
+                        ),
+                        );
+                        } else if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        return Center(
+                            child: CircularProgressIndicator());
+                      },
+                  )
                 ),
               ],
             ),
@@ -162,15 +176,19 @@ class _listaPaises extends State<ListaPaises>{
         ); // Listview
   }
 
-  String rating(String codigo){
-    int rating = 0;
+  Future<String> rating(String codigo) async{
+    late int rating;
     PaisDatabase bbdd = PaisDatabase.instance;
-    bbdd.read(codigo, "ranking").then(
-            (value) {
-          rating = value.ranking;
-        }
-    );
-    return rating.toString();
+    await bbdd.read(codigo, "ranking").then(
+              (value) {
+            rating = value.ranking;
+          }
+      );
+    if(rating == -1){
+      return "No ranked";
+    }else{
+      return rating.toString();
+    }
   }
 
 }

@@ -97,7 +97,7 @@ class PaisDatabase{
     if (maps.isNotEmpty){
       return Pais.fromJson(maps.first);
     }else{
-      throw Exception ('Code $code not found');
+      return new Pais(ranking: -1, code: code);
     }
   }
 

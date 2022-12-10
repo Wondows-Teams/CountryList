@@ -86,7 +86,7 @@ class NotVisitingCountry extends StatelessWidget {
           'Countries not going to visit:',
         ),
         Expanded(
-          child: ListaPaises(listaCodigos("notVisit"), true),
+          child: ListaPaises(listaCodigos("notVisited"), true),
         ),
       ],
     );
