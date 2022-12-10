@@ -1,0 +1,116 @@
+import 'package:countrylist/profile.dart';
+import 'package:countrylist/top.dart';
+import 'package:flutter/material.dart';
+
+import 'ListaPaises.dart';
+
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: MyMain(),
+    );
+  }
+}
+
+class MyMain extends StatefulWidget {
+
+
+  MyMain({super.key});
+
+  @override
+  State<MyMain> createState() => _MyMain();
+
+}
+
+class _MyMain extends State<MyMain> {
+
+  int index = 1;
+  var scenes = [
+    MyTop(),
+    ListaPaises([], false),
+    MyProfile(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+
+        title: Text("My Country List"),
+      ),
+      drawer: CustomDrawer(),
+      body: scenes[index],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        onTap: (index) => setState(() => this.index = index),
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.star),
+              label: "Best"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: "Home"
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: "Profile"
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomDrawer extends StatelessWidget {
+  CustomDrawer({super.key});
+
+  void navegacioncita(){
+
+  }
+  @override
+  Widget build(BuildContext context){
+    return Drawer(
+      child: ListView(
+        children: [
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text("Menu Principal"),
+            onTap: (){},
+          ),
+          ListTile(
+            leading: Icon(Icons.analytics),
+            title: Text("Estadísticas"),
+            onTap: (){},
+          ),
+          ListTile(
+            leading: Icon(Icons.beenhere),
+            title: Text("Insignias"),
+            onTap: (){},
+          ),
+        ],
+        ),
+    );
+  }
+}

@@ -1,6 +1,8 @@
 import 'package:countrylist/PaisAPI.dart';
 import 'package:countrylist/PaisHttpService.dart';
+import 'package:countrylist/dataModel.dart';
 import 'package:flutter/material.dart';
+import 'database.dart';
 
 class ListaPaisesPrincipal extends StatelessWidget {
   @override
@@ -29,11 +31,14 @@ class ListaPaises extends StatefulWidget {
 class _listaPaises extends State<ListaPaises>{
   late Future<List<PaisAPI>> paises;
   String busqueda = "";
+  //PaisDatabase bbdd = PaisDatabase.instance;
 
   @override
   void initState() {
     super.initState();
     _fetchPaises();
+    //bbdd.create(Pais(ranking: 5, code: "ESP"), "favs");
+    //bbdd.read("ESP", "favs").then((value) => debugPrint(value.ranking.toString()));
   }
 
   _fetchPaises() async {
