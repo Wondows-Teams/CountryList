@@ -3,6 +3,8 @@ import 'package:countrylist/top.dart';
 import 'package:flutter/material.dart';
 
 import 'ListaPaises.dart';
+import 'dataModel.dart';
+import 'database.dart';
 
 
 void main() {
@@ -45,10 +47,9 @@ class MyMain extends StatefulWidget {
 }
 
 class _MyMain extends State<MyMain> {
-
   int index = 1;
   var scenes = [
-    MyTop(),
+    ListaPaises(codigosTop(), true),
     ListaPaises([], false),
     MyProfile(),
   ];
@@ -81,6 +82,21 @@ class _MyMain extends State<MyMain> {
       ),
     );
   }
+}
+
+List<String> codigosTop(){
+  PaisDatabase bbdd = PaisDatabase.instance;
+  List<String> codigos = [];
+  List<Pais> paises = [];
+  bbdd.readAll("favs").then(
+          (value) {
+            paises = value;
+            paises.forEach((element) {
+            codigos.add(element.code);
+            });
+          }
+  );
+  return codigos;
 }
 
 class CustomDrawer extends StatelessWidget {

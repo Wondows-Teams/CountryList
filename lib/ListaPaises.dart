@@ -31,14 +31,18 @@ class ListaPaises extends StatefulWidget {
 class _listaPaises extends State<ListaPaises>{
   late Future<List<PaisAPI>> paises;
   String busqueda = "";
-  //PaisDatabase bbdd = PaisDatabase.instance;
+  PaisDatabase bbdd = PaisDatabase.instance;
 
   @override
   void initState() {
     super.initState();
     _fetchPaises();
-    //bbdd.create(Pais(ranking: 5, code: "ESP"), "favs");
-    //bbdd.read("ESP", "favs").then((value) => debugPrint(value.ranking.toString()));
+    bbdd.create(Pais(ranking: 5, code: "ESP"), "favs");
+    bbdd.create(Pais(ranking: 5, code: "BRA"), "planned");
+    bbdd.create(Pais(ranking: 5, code: "JPN"), "visited");
+    bbdd.create(Pais(ranking: 5, code: "JAM"), "visited");
+    bbdd.create(Pais(ranking: 5, code: "JEY"), "notVisit");
+    bbdd.read("ESP", "favs").then((value) => debugPrint(value.ranking.toString()));
   }
 
   _fetchPaises() async {

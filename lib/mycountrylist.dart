@@ -3,6 +3,8 @@ import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 
 import 'ListaPaises.dart';
+import 'dataModel.dart';
+import 'database.dart';
 
 class MyCountryList extends StatefulWidget {
 
@@ -20,7 +22,7 @@ class _MyCountryList extends State<MyCountryList>{
   @override
   Widget build (BuildContext context){
     return DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
           appBar: AppBar(
             title: Text("Your Country List"),
@@ -29,7 +31,6 @@ class _MyCountryList extends State<MyCountryList>{
             ),
             bottom: TabBar(
               tabs: [
-                Tab(text: "Visiting",),
                 Tab(text: "Visited",),
                 Tab(text: "Not visiting",),
                 Tab(text: "Plan to visit",),
@@ -46,7 +47,6 @@ class _MyCountryList extends State<MyCountryList>{
             // in the middle of the parent.
             child: TabBarView(
               children: [
-                VisitingCountry(),
                 VisitedCountry(),
                 NotVisitingCountry(),
                 PlanToVisitCountry(),
@@ -54,24 +54,6 @@ class _MyCountryList extends State<MyCountryList>{
             ),
           ),
         ),
-    );
-  }
-}
-
-
-class VisitingCountry extends StatelessWidget {
-
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        const Text(
-          'Countries visiting right now:',
-        ),
-        Expanded(
-            child: ListaPaises(["ESP"], true),
-        ),
-      ],
     );
   }
 }
@@ -87,7 +69,7 @@ class VisitedCountry extends StatelessWidget {
           'Visited countries:',
         ),
         Expanded(
-          child: ListaPaises(["AFG"], true),
+          child: ListaPaises(listaCodigos("visited"), true),
         ),
       ],
     );
@@ -104,7 +86,7 @@ class NotVisitingCountry extends StatelessWidget {
           'Countries not going to visit:',
         ),
         Expanded(
-          child: ListaPaises(["BRA"], true),
+          child: ListaPaises(listaCodigos("planned"), true),
         ),
       ],
     );
@@ -121,9 +103,24 @@ class PlanToVisitCountry extends StatelessWidget {
           'Countries planing to visit:',
         ),
         Expanded(
-          child: ListaPaises(["JPN"], true),
+          child: ListaPaises(listaCodigos("planned"), true),
         ),
       ],
     );
   }
+}
+
+List<String> listaCodigos(String tabla){
+  PaisDatabase bbdd = PaisDatabase.instance;
+  List<String> codigos = [];
+  List<Pais> paises = [];
+  bbdd.readAll(tabla).then(
+          (value) {
+        paises = value;
+        paises.forEach((element) {
+          codigos.add(element.code);
+        });
+      }
+  );
+  return codigos;
 }

@@ -29,7 +29,7 @@ class Pais{
   ///Convierte el mapa guardado por la DB a un objeto Pais
   static Pais fromJson(Map<String, Object?> json) => Pais(
     id: json[atributosPais.id] as int?,
-    ranking: json[atributosPais.ranking] as int,
+    ranking: int.parse(json[atributosPais.ranking].toString()),
     code: json[atributosPais.code] as String,
   );
 

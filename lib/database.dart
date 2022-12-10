@@ -29,7 +29,7 @@ class PaisDatabase{
 
   ///Inicializa la DB con las tablas indicadas
   Future _createDB(Database db, int version) async {
-    final idType = 'INTEGER PRIMARY KEY AUTONICREMENT';
+    final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final boolType = 'BOOLEAN NOT NULL';
     final intType = 'INTEGER NOT NULL';
     final textType = 'TEXT NOT NULL';
@@ -38,7 +38,7 @@ class PaisDatabase{
     CREATE TABLE $paisesFavs(
     ${atributosPais.id} $idType,
     ${atributosPais.ranking} $textType,
-    ${atributosPais.code} $intType,
+    ${atributosPais.code} $intType
     )
     ''');
 
@@ -46,7 +46,7 @@ class PaisDatabase{
     CREATE TABLE $paisesVisitados(
       ${atributosPais.id} $idType,
       ${atributosPais.ranking} $textType,
-      ${atributosPais.code} $intType,
+      ${atributosPais.code} $intType
     )
     ''');
 
@@ -54,7 +54,7 @@ class PaisDatabase{
     CREATE TABLE $paisesPlan(
     ${atributosPais.id} $idType,
     ${atributosPais.ranking} $textType,
-    ${atributosPais.code} $intType,
+    ${atributosPais.code} $intType
     )
     ''');
   }
