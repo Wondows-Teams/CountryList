@@ -43,6 +43,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_profile_picture: ^2.0.0
   flag: ^6.0.0
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  assets:
+    - assets/Eliwood.jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

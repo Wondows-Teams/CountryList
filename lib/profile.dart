@@ -13,30 +13,18 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfile extends State<MyProfile>{
 
-    String name = "Anónimo";
-    String image = "";
-    int pfpIndex = 0;
+  late User user;
+
+  @override
+  void initState() {
+    user = User();
+    super.initState();
+  }
+
+
 
   @override
   Widget build (BuildContext context){
-    if (image == ""){
-      pfpIndex = 0;
-    } else {
-      pfpIndex = 1;
-    }
-
-    var profilePicture = [
-      ProfilePicture(name: name,
-        radius: 100,
-        fontsize: 100,),
-
-      ProfilePicture(
-        name: name,
-        radius: 100,
-        fontsize: 100,
-        img: image,
-      ),
-    ];
 
     void toCountryList(){
       Navigator.push(context, MaterialPageRoute(builder: (context) => MyCountryList()));
@@ -46,8 +34,29 @@ class _MyProfile extends State<MyProfile>{
       Navigator.push(context, MaterialPageRoute(builder: (context) => MyStats()));
     }
 
-    void toEditPage(){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+    void toEditPage() async {
+        final newUser = await Navigator.push(context,
+            MaterialPageRoute(builder: (context) => EditProfile(user: user,)));
+        setState(() => this.user = newUser);
+    }
+
+
+    Widget CustomProfilePicture() {
+      return Stack(
+        children: [
+          user.image != null
+              ? ClipOval(child: Image.file(user.image! , width: 160, height: 160, fit: BoxFit.cover),)
+              : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
+          Positioned(
+            child: FloatingActionButton(
+              onPressed: toEditPage,
+              child: Icon(Icons.edit),
+            ),
+            right: 0,
+            bottom: 0,
+          ),
+        ],
+      );
     }
 
     return Center(
@@ -61,21 +70,9 @@ class _MyProfile extends State<MyProfile>{
             'Welcome to your profile',
           ),
           Spacer(),
-          Stack(
-              children: [
-                profilePicture[pfpIndex],
-                Positioned(
-                  child: FloatingActionButton(
-                    onPressed: toEditPage,
-                    child: Icon(Icons.edit),
-                  ),
-                  right: 0,
-                  bottom: 0,
-                ),
-              ],
-          ),
+          CustomProfilePicture(),
           Spacer(),
-          Text(name,
+          Text(user.name,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
           ),
           Spacer(),
