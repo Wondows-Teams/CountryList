@@ -2,6 +2,8 @@
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 
+import 'ListaPaises.dart';
+
 class MyCountryList extends StatefulWidget {
 
 
@@ -66,30 +68,8 @@ class VisitingCountry extends StatelessWidget {
         const Text(
           'Countries visiting right now:',
         ),
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-
-          children: [
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.SE, width: 30, height: 30),
-                Text("Sweden"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.FR, width: 30, height: 30),
-                Text("France"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.DE, width: 30, height: 30),
-                Text("Germany"),
-              ],
-            ),
-          ],
+        Expanded(
+            child: ListaPaises(["ESP"], true),
         ),
       ],
     );
@@ -106,41 +86,8 @@ class VisitedCountry extends StatelessWidget {
         const Text(
           'Visited countries:',
         ),
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-
-          children: [
-            Divider(
-            ),
-            Row(
-              children: [
-                SizedBox(width: 30),
-                Flag.fromCode(FlagsCode.ES, width: 30, height: 30),
-                SizedBox(width: 20),
-                Text("Spain"),
-              ],
-            ),
-            Divider(),
-            Row(
-              children: [
-                SizedBox(width: 30),
-                Flag.fromCode(FlagsCode.IT, width: 30, height: 30),
-                SizedBox(width: 20),
-                Text("Italy"),
-              ],
-            ),
-            Divider(),
-            Row(
-              children: [
-                SizedBox(width: 30),
-                Flag.fromCode(FlagsCode.GB, width: 30, height: 30),
-                SizedBox(width: 20),
-                Text("Great Britain"),
-              ],
-            ),
-            Divider(),
-          ],
+        Expanded(
+          child: ListaPaises(["AFG"], true),
         ),
       ],
     );
@@ -156,30 +103,8 @@ class NotVisitingCountry extends StatelessWidget {
         const Text(
           'Countries not going to visit:',
         ),
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-
-          children: [
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.QA, width: 30, height: 30),
-                Text("Qatar"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.SA, width: 30, height: 30),
-                Text("Saudi Arabia"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.KP, width: 30, height: 30),
-                Text("North Korea"),
-              ],
-            ),
-          ],
+        Expanded(
+          child: ListaPaises(["BRA"], true),
         ),
       ],
     );
@@ -195,30 +120,8 @@ class PlanToVisitCountry extends StatelessWidget {
         const Text(
           'Countries planing to visit:',
         ),
-        ListView(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-
-          children: [
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.BR, width: 30, height: 30),
-                Text("Brazil"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.JP, width: 30, height: 30),
-                Text("Japan"),
-              ],
-            ),
-            Row(
-              children: [
-                Flag.fromCode(FlagsCode.KR, width: 30, height: 30),
-                Text("Korea"),
-              ],
-            ),
-          ],
+        Expanded(
+          child: ListaPaises(["JPN"], true),
         ),
       ],
     );

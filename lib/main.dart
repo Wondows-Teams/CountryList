@@ -2,6 +2,8 @@ import 'package:countrylist/profile.dart';
 import 'package:countrylist/top.dart';
 import 'package:flutter/material.dart';
 
+import 'ListaPaises.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +49,7 @@ class _MyMain extends State<MyMain> {
   int index = 1;
   var scenes = [
     MyTop(),
-    MyHomePage(),
+    ListaPaises([], false),
     MyProfile(),
   ];
   @override
@@ -81,33 +83,6 @@ class _MyMain extends State<MyMain> {
   }
 }
 
-
-class MyHomePage extends StatefulWidget {
-
-
-  @override
-  State<MyHomePage> createState() => _MyHomePage();
-}
-
-class _MyHomePage extends State<MyHomePage>{
-
-
-  @override
-  Widget build (BuildContext context){
-    return Center(
-      // Center is a layout widget. It takes a single child and positions it
-      // in the middle of the parent.
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'You are in the main menu',
-          ),
-        ],
-      ),
-    );
-  }
-}
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
 
