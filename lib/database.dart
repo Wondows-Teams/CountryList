@@ -57,6 +57,22 @@ class PaisDatabase{
     ${atributosPais.code} $intType
     )
     ''');
+
+    await db.execute('''
+    CREATE TABLE $paisesNoVisitados(
+    ${atributosPais.id} $idType,
+    ${atributosPais.ranking} $textType,
+    ${atributosPais.code} $intType
+    )
+    ''');
+
+    await db.execute('''
+    CREATE TABLE $paisesRanking(
+    ${atributosPais.id} $idType,
+    ${atributosPais.ranking} $textType,
+    ${atributosPais.code} $intType
+    )
+    ''');
   }
 
   ///Añade un pais a la DB en la tabla indicada
