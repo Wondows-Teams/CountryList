@@ -63,40 +63,34 @@ class _listaPaises extends State<ListaPaises>{
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Holw ewns"),
+    return Column(
+      children: [
+        TextField(
+          onSubmitted: (value) {
+            actualizarBusqueda(value);
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search),
+          ),),
+        Expanded(
+            child: FutureBuilder(
+              future: paises,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return listViewPaises(snapshot.data, widget.codPaisesFiltro,
+                      widget.filtroActivo);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return Center(
+                    child: CircularProgressIndicator());
+              },
+            )
         ),
-        body: Column(
-            children: [
-                TextField(
-                  onSubmitted: (value) {
-                    actualizarBusqueda(value);
-                  },
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                ),),
-              Expanded(
-                  child: FutureBuilder(
-                    future: paises,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return listViewPaises(snapshot.data, widget.codPaisesFiltro, widget.filtroActivo);
-                      } else if (snapshot.hasError) {
-                        return Text("${snapshot.error}");
-                      }
-                      return Center(
-                          child: CircularProgressIndicator());
-                    },
-                  )
-              ),
 
-            ],
-          ),
-
+      ],
     );
   }
-
   ListView listViewPaises(List<PaisAPI>? paises, List<String> _codPaisesFiltro, bool _filtroActivo){
     List<PaisAPI> auxList = paises!;
 
@@ -119,59 +113,90 @@ class _listaPaises extends State<ListaPaises>{
         }
 
         return ListView.builder(
+
+          padding: EdgeInsets.all(4), // agrega padding al contenedor
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: auxList.length,
-
         itemBuilder: (context, index) {
-          return Card(
+          return Padding(padding: EdgeInsets.all(5),
+          child: Card(
             elevation: 5, // agrega una sombra debajo de la tarjeta
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10), // redondea los bordes de la tarjeta
+              borderRadius: BorderRadius.circular(15), // redondea los bordes de la tarjeta
             ),
-            child: Column(
-              children: [
-                // agrega una imagen que ocupa toda la anchura de la tarjeta
-                Image.network(auxList[index].flags.png!, height: 100,width: 100,),
-                // agrega un contenedor para mostrar el nombre del país
-                Container(
-                  padding: EdgeInsets.all(10), // agrega padding al contenedor
-                  child: Text(
-                    auxList[index].name,
-                    style: TextStyle(
-                      fontSize: 20, // agrega un tamaño de fuente de 20 puntos
-                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                      color: Colors.blue, // agrega un color azul para el texto
+            child:
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child:
+                Row(
+                  children: [
+                    SizedBox(width: 20),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child:  Image.network(auxList[index].flags.png!, fit: BoxFit.cover, scale: 3,),
                     ),
-                  ),
-                ),
-                // agrega un contenedor para mostrar la puntuación del país
-                Text("Poblacion: " + auxList[index].population.toString()),
-                Container(
-                  padding: EdgeInsets.all(10), // agrega padding al contenedor
-                  child: FutureBuilder(
-                      future: rating(auxList[index].alpha3Code!),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                        snapshot.data!,
-                        style: TextStyle(
-                        fontSize: 18, // agrega un tamaño de fuente de 18 puntos
-                        fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                        color: Colors.green, // agrega un color verde para el texto
+                    Expanded(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+                        // agrega un contenedor para mostrar el nombre del país
+                        Container(
+                          padding: EdgeInsets.all(10), // agrega padding al contenedor
+                          child: Text(
+                            auxList[index].name,
+                            style: TextStyle(
+                              fontSize: 20, // agrega un tamaño de fuente de 20 puntos
+                              fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                              color: Colors.blue, // agrega un color azul para el texto
+                            ),
+                          ),
                         ),
-                        );
-                        } else if (snapshot.hasError) {
-                          return Text("${snapshot.error}");
-                        }
-                        return Center(
-                            child: CircularProgressIndicator());
-                      },
-                  )
-                ),
-              ],
+                        Text("Capital: " + siNullVacio(auxList[index].capital),
+                          style: TextStyle(
+                            fontSize: 10, // agrega un tamaño de fuente de 20 puntos
+                            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                            color: Colors.black, // agrega un color azul para el texto
+                          ),),
+                        Text("Population: " + auxList[index].population.toString(),
+                          style: TextStyle(
+                            fontSize: 10, // agrega un tamaño de fuente de 20 puntos
+                            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                            color: Colors.black, // agrega un color azul para el texto
+                          ),),
+                        // agrega un contenedor para mostrar la puntuación del país
+                        Container(
+                            padding: EdgeInsets.all(10), // agrega padding al contenedor
+                            child: FutureBuilder(
+                              future: rating(auxList[index].alpha3Code!),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    "Rating: " + snapshot.data!,
+                                    style: TextStyle(
+                                      fontSize: 18, // agrega un tamaño de fuente de 18 puntos
+                                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                                      color: Colors.green, // agrega un color verde para el texto
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  return Text("${snapshot.error}");
+                                }
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            )
+                        ),
+                      ],
+                    ),
+                    ),],
+                )
             ),
-          );
+          ),);
           },
         ); // Listview
   }
@@ -188,6 +213,14 @@ class _listaPaises extends State<ListaPaises>{
       return "No ranked";
     }else{
       return rating.toString();
+    }
+  }
+
+  String siNullVacio(String? s){
+    if(s == null){
+      return "Not exist";
+    }else{
+      return s;
     }
   }
 
