@@ -67,6 +67,12 @@ class VisitedCountry extends StatelessWidget {
       children: <Widget>[
         const Text(
           'Visited countries:',
+          style: TextStyle(
+            fontSize: 30, // agrega un tamaño de fuente de 20 puntos
+            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+            color: Colors.blue, // agrega un color azul para el texto
+
+          ),
         ),
         Expanded(
           child: ListaPaises(listaCodigos("visited"), true),
@@ -84,6 +90,12 @@ class NotVisitingCountry extends StatelessWidget {
       children: <Widget>[
         const Text(
           'Countries not going to visit:',
+          style: TextStyle(
+            fontSize: 30, // agrega un tamaño de fuente de 20 puntos
+            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+            color: Colors.blue, // agrega un color azul para el texto
+
+          ),
         ),
         Expanded(
           child: ListaPaises(listaCodigos("notVisited"), true),
@@ -101,6 +113,12 @@ class PlanToVisitCountry extends StatelessWidget {
       children: <Widget>[
         const Text(
           'Countries planing to visit:',
+          style: TextStyle(
+            fontSize: 30, // agrega un tamaño de fuente de 20 puntos
+            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+            color: Colors.blue, // agrega un color azul para el texto
+
+          ),
         ),
         Expanded(
           child: ListaPaises(listaCodigos("planned"), true),
