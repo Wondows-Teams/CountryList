@@ -212,7 +212,7 @@ class _listaPaises extends State<ListaPaises>{
     if(rating == -1){
       return "No ranked";
     }else{
-      return rating.toString();
+      return rating.toString() + "/10";
     }
   }
 
