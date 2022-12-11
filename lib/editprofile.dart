@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {
 
@@ -25,11 +26,13 @@ class _EditProfile extends State<EditProfile>{
   String pruebita = "Pruebita";
 
 
-  void SaveChanges(){
+  void SaveChanges() async{
+    final prefs = await SharedPreferences.getInstance();
     setState(() {
       user.name = tController.text;
       pruebita = tController.text;
     });
+    prefs.setString("name", user.name!);
   }
 
   void OpenDialog() => showDialog(
@@ -44,11 +47,18 @@ class _EditProfile extends State<EditProfile>{
   );
 
   Future PickImage(ImageSource source) async{
+    final prefs = await SharedPreferences.getInstance();
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      final imageTemporary = File(image.path);
-      setState(() => user.image = imageTemporary);
+      ;
+      setState(() => user.image = image.path);
+
+      if (user.image == null){
+        user.image == "";
+      }
+
+      prefs.setString("image", user.image!);
 
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
@@ -59,7 +69,7 @@ class _EditProfile extends State<EditProfile>{
     return Stack(
       children: [
         user.image != null
-            ? ClipOval(child: Image.file(user.image! , width: 160, height: 160, fit: BoxFit.cover),)
+            ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
             : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
         Positioned(
           child: FloatingActionButton(
@@ -105,7 +115,7 @@ class _EditProfile extends State<EditProfile>{
             ],
           ),
             Spacer(),
-            Text(user.name),
+            Text(user.name!),
             ElevatedButton(
                 onPressed: SaveChanges,
                 child: Text("Save changes")
@@ -163,13 +173,21 @@ class _CustomTextField extends State<CustomTextField>{
 
 
 class User {
-  String name = "Anónimo";
-  File? image;
+  String? name;
+  String? image;
 
-  User(){
-    this.name = "Anónimo";
-    this.image = null;
+  User() {
+    createPreferences();
   }
 
+   void createPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    this.name = await prefs.getString("name");
+    this.image = await prefs.getString("image");
+
+    if(this.name == null){
+      this.name = "User";
+    }
+  }
 
 }

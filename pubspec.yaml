@@ -44,6 +44,7 @@ dependencies:
   flutter_profile_picture: ^2.0.0
   flag: ^6.0.0
   image_picker: ^0.8.6
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

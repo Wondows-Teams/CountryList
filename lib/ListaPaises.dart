@@ -1,5 +1,6 @@
 import 'package:countrylist/PaisAPI.dart';
 import 'package:countrylist/PaisHttpService.dart';
+import 'package:countrylist/PaisProfile.dart';
 import 'package:countrylist/dataModel.dart';
 import 'package:flutter/material.dart';
 import 'database.dart';
@@ -118,85 +119,88 @@ class _listaPaises extends State<ListaPaises>{
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: auxList.length,
-        itemBuilder: (context, index) {
-          return Padding(padding: EdgeInsets.all(5),
-          child: Card(
-            elevation: 5, // agrega una sombra debajo de la tarjeta
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15), // redondea los bordes de la tarjeta
-            ),
-            child:
-            Container(
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child:
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child:  Image.network(auxList[index].flags.png!, fit: BoxFit.cover, scale: 3,),
-                    ),
-                    Expanded(child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
+          itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PaisProfile())),
+              child: Padding(padding: EdgeInsets.all(5),
+            child: Card(
+              elevation: 5, // agrega una sombra debajo de la tarjeta
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15), // redondea los bordes de la tarjeta
+              ),
+              child:
+              Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black12,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child:
+                  Row(
+                    children: [
+                      SizedBox(width: 20),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child:  Image.network(auxList[index].flags.png!, fit: BoxFit.cover, scale: 3,),
+                      ),
+                      Expanded(child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
 
-                      children: [
-                        // agrega un contenedor para mostrar el nombre del país
-                        Container(
-                          padding: EdgeInsets.all(10), // agrega padding al contenedor
-                          child: Text(
-                            auxList[index].name,
-                            style: TextStyle(
-                              fontSize: 20, // agrega un tamaño de fuente de 20 puntos
-                              fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                              color: Colors.blue, // agrega un color azul para el texto
+                        children: [
+                          // agrega un contenedor para mostrar el nombre del país
+                          Container(
+                            padding: EdgeInsets.all(10), // agrega padding al contenedor
+                            child: Text(
+                              auxList[index].name,
+                              style: TextStyle(
+                                fontSize: 20, // agrega un tamaño de fuente de 20 puntos
+                                fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                                color: Colors.blue, // agrega un color azul para el texto
+                              ),
                             ),
                           ),
-                        ),
-                        Text("Capital: " + siNullVacio(auxList[index].capital),
-                          style: TextStyle(
-                            fontSize: 10, // agrega un tamaño de fuente de 20 puntos
-                            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                            color: Colors.black, // agrega un color azul para el texto
-                          ),),
-                        Text("Population: " + auxList[index].population.toString(),
-                          style: TextStyle(
-                            fontSize: 10, // agrega un tamaño de fuente de 20 puntos
-                            fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                            color: Colors.black, // agrega un color azul para el texto
-                          ),),
-                        // agrega un contenedor para mostrar la puntuación del país
-                        Container(
-                            padding: EdgeInsets.all(10), // agrega padding al contenedor
-                            child: FutureBuilder(
-                              future: rating(auxList[index].alpha3Code!),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    "Rating: " + snapshot.data!,
-                                    style: TextStyle(
-                                      fontSize: 18, // agrega un tamaño de fuente de 18 puntos
-                                      fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                                      color: Colors.green, // agrega un color verde para el texto
-                                    ),
-                                  );
-                                } else if (snapshot.hasError) {
-                                  return Text("${snapshot.error}");
-                                }
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              },
-                            )
-                        ),
-                      ],
-                    ),
-                    ),],
-                )
-            ),
-          ),);
+                          Text("Capital: " + siNullVacio(auxList[index].capital),
+                            style: TextStyle(
+                              fontSize: 10, // agrega un tamaño de fuente de 20 puntos
+                              fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                              color: Colors.black, // agrega un color azul para el texto
+                            ),),
+                          Text("Population: " + auxList[index].population.toString(),
+                            style: TextStyle(
+                              fontSize: 10, // agrega un tamaño de fuente de 20 puntos
+                              fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                              color: Colors.black, // agrega un color azul para el texto
+                            ),),
+                          // agrega un contenedor para mostrar la puntuación del país
+                          Container(
+                              padding: EdgeInsets.all(10), // agrega padding al contenedor
+                              child: FutureBuilder(
+                                future: rating(auxList[index].alpha3Code!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      "Rating: " + snapshot.data!,
+                                      style: TextStyle(
+                                        fontSize: 18, // agrega un tamaño de fuente de 18 puntos
+                                        fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                                        color: Colors.green, // agrega un color verde para el texto
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return Text("${snapshot.error}");
+                                  }
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              )
+                          ),
+                        ],
+                      ),
+                      ),],
+                  )
+              ),
+            ),)
+          );
           },
         ); // Listview
   }

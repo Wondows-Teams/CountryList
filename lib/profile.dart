@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:countrylist/mycountrylist.dart';
 import 'package:countrylist/stats.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfile extends State<MyProfile>{
 
-  late User user;
+  User user = User();
 
   @override
   void initState() {
@@ -45,7 +47,7 @@ class _MyProfile extends State<MyProfile>{
       return Stack(
         children: [
           user.image != null
-              ? ClipOval(child: Image.file(user.image! , width: 160, height: 160, fit: BoxFit.cover),)
+              ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
               : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
           Positioned(
             child: FloatingActionButton(
@@ -72,9 +74,10 @@ class _MyProfile extends State<MyProfile>{
           Spacer(),
           CustomProfilePicture(),
           Spacer(),
-          Text(user.name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-          ),
+          user.name != null
+              ? Text(user.name!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
+              : Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+
           Spacer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

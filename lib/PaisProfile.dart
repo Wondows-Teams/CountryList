@@ -8,11 +8,16 @@ class PaisProfile extends StatefulWidget {
 }
 
 class _PaisProfile extends State<PaisProfile>{
+
+  void toAddCountry(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Country Profile"),
       ),
       body: Center(
         child: Column(
@@ -47,7 +52,6 @@ class _PaisProfile extends State<PaisProfile>{
                 ),
               ],
             ),
-
 
 
             Row(
@@ -88,9 +92,9 @@ class _PaisProfile extends State<PaisProfile>{
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: toAddCountry,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add_chart),
       ),
     );
   }
