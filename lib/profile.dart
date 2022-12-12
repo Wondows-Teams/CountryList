@@ -89,6 +89,10 @@ class _MyProfile extends State<MyProfile>{
           Spacer(),
           const Text(
             'Welcome to your profile',
+            style: TextStyle(
+              fontSize: 20,
+              //color: Colors.white70
+            ),
           ),
           Spacer(),
           CustomProfilePicture(),
@@ -106,7 +110,70 @@ class _MyProfile extends State<MyProfile>{
           ),
 
           Spacer(),
-          Row(
+
+          Container(
+            margin: EdgeInsets.all(15),
+            //padding: EdgeInsets.all(50),// respecto al exterior
+            /*decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.teal.shade100,
+                width: 20,
+              ),
+            ),*/
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width:8,
+                      color: Colors.teal
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 15,
+                ),
+                fixedSize: Size(240, 80),
+              ),
+              child: Text("Your Country List",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              onPressed: toCountryList,
+            ),
+          ),
+
+          //SizedBox(width: 50),
+          //Spacer(),
+
+          Container(
+            margin: EdgeInsets.all(15),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width:8,
+                      color: Colors.teal
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 15,
+                ),
+                fixedSize: Size(240, 80),
+              ),
+              child: Text("Your Stats",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              onPressed: toStats,
+            ),
+          ),
+
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(

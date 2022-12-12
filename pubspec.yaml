@@ -45,6 +45,7 @@ dependencies:
   flag: ^6.0.0
   image_picker: ^0.8.6
   shared_preferences: ^2.0.15
+  countries_world_map: ^0.0.7
 
 dev_dependencies:
   flutter_test:
@@ -64,6 +65,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/Eliwood.jpg
+    - assets/MyCountryList.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
