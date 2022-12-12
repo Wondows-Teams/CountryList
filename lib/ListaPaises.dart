@@ -12,7 +12,7 @@ class ListaPaisesPrincipal extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
       ),
       home: ListaPaises(["ESP", "BR", "AFG"], false),
     );
@@ -131,7 +131,7 @@ class _listaPaises extends State<ListaPaises>{
               child:
               Container(
                   decoration: BoxDecoration(
-                    color: Colors.black12,
+                    color: Colors.teal.shade100,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child:
@@ -155,7 +155,7 @@ class _listaPaises extends State<ListaPaises>{
                               style: TextStyle(
                                 fontSize: 20, // agrega un tamaño de fuente de 20 puntos
                                 fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-                                color: Colors.blue, // agrega un color azul para el texto
+                                color: Colors.teal, // agrega un color azul para el texto
                               ),
                             ),
                           ),

@@ -69,8 +69,8 @@ class _EditProfile extends State<EditProfile>{
     return Stack(
       children: [
         user.image != null
-            ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
-            : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
+            ? ClipOval(child: Image.file(File(user.image!) , width: 260, height: 260, fit: BoxFit.cover),)
+            : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 260, height: 260, fit: BoxFit.cover)),
         Positioned(
           child: FloatingActionButton(
             onPressed: OpenDialog,
@@ -107,18 +107,48 @@ class _EditProfile extends State<EditProfile>{
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, /*color: Colors.white70*/),),
               SizedBox(height: 10,),
               TextField(
                 controller: tController,
+                //cursorHeight: 100,
               )
             ],
           ),
             Spacer(),
-            Text(user.name!),
-            ElevatedButton(
+            Text(user.name!,
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            /*ElevatedButton(
                 onPressed: SaveChanges,
                 child: Text("Save changes")
+            ),*/
+            Container(
+              margin: EdgeInsets.all(15),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        width:8,
+                        color: Colors.teal
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 15,
+                  ),
+                  fixedSize: Size(240, 80),
+                ),
+                child: Text("Save changes",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
+                onPressed: SaveChanges,
+              ),
             ),
             Spacer(),
 

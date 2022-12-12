@@ -47,8 +47,8 @@ class _MyProfile extends State<MyProfile>{
       return Stack(
         children: [
           user.image != null
-              ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
-              : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
+              ? ClipOval(child: Image.file(File(user.image!) , width: 260, height: 260, fit: BoxFit.cover),)//160x160
+              : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 260, height: 260, fit: BoxFit.cover)),
           Positioned(
             child: FloatingActionButton(
               onPressed: toEditPage,
@@ -70,16 +70,83 @@ class _MyProfile extends State<MyProfile>{
           Spacer(),
           const Text(
             'Welcome to your profile',
+            style: TextStyle(
+              fontSize: 20,
+              //color: Colors.white70
+            ),
           ),
           Spacer(),
           CustomProfilePicture(),
           Spacer(),
           user.name != null
-              ? Text(user.name!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
-              : Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+              ? Text(user.name!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, /*color: Colors.white70*/))
+              : Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, /*color: Colors.white70*/)),
 
           Spacer(),
-          Row(
+
+          Container(
+            margin: EdgeInsets.all(15),
+            //padding: EdgeInsets.all(50),// respecto al exterior
+            /*decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.teal.shade100,
+                width: 20,
+              ),
+            ),*/
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width:8,
+                      color: Colors.teal
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 15,
+                ),
+                fixedSize: Size(240, 80),
+              ),
+              child: Text("Your Country List",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              onPressed: toCountryList,
+            ),
+          ),
+
+          //SizedBox(width: 50),
+          //Spacer(),
+
+          Container(
+            margin: EdgeInsets.all(15),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                      width:8,
+                      color: Colors.teal
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.symmetric(
+                  vertical: 15,
+                  horizontal: 15,
+                ),
+                fixedSize: Size(240, 80),
+              ),
+              child: Text("Your Stats",
+                style: TextStyle(
+                  fontSize: 25,
+                ),
+              ),
+              onPressed: toStats,
+            ),
+          ),
+
+          /*Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ElevatedButton(
@@ -92,7 +159,7 @@ class _MyProfile extends State<MyProfile>{
                   onPressed: toStats,
               ),
             ],
-          ),
+          ),*/
           Spacer(),
         ],
       ),
