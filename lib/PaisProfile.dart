@@ -33,13 +33,7 @@ class _PaisProfile extends State<PaisProfile>{
     PaisDatabase bbdd = PaisDatabase.instance;
     bbdd.create(Pais(ranking: -1, code: country.alpha3Code!), table);
   }
-  void deleteCountry(){
-    PaisDatabase bbdd = PaisDatabase.instance;
-    bbdd.delete(country.alpha3Code!, paisesVisitados);
-    bbdd.delete(country.alpha3Code!, paisesNoVisitados);
-    bbdd.delete(country.alpha3Code!, paisesPlan);
-    Navigator.pop(context);
-  }
+
   void OpenCountryOption() =>
       showModalBottomSheet(
         context: context,
@@ -49,28 +43,30 @@ class _PaisProfile extends State<PaisProfile>{
 
   Widget pictureCountrySheet(){
     return Container(
-      height: 230,
+      height: 100,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          Text("Add country to list:"),
+          Text("Choose an option"),
           SizedBox(height: 20,),
           Row(
             children: [
-              TextButton.icon(icon: Icon(Icons.flag_circle),onPressed: () => addCountry(paisesVisitados) , label: Text("Visited")),
+              Icon(Icons.camera_alt),
+              TextButton(onPressed: () => addCountry(paisesVisitados) , child: Text("Visited")),
             ],
           ),
           Row(
             children: [
-              TextButton.icon(icon: Icon(Icons.flag_outlined),onPressed: () => addCountry(paisesNoVisitados) , label: Text("Not visiting")),
+              Icon(Icons.article),
+              TextButton(onPressed: () => addCountry(paisesNoVisitados) , child: Text("Not visiting")),
             ],
           ),
           Row(
             children: [
-              TextButton.icon(icon: Icon(Icons.flag_circle_outlined),onPressed: () => addCountry(paisesPlan) , label: Text("Plan to visit")),
+              Icon(Icons.article),
+              TextButton(onPressed: () => addCountry(paisesPlan) , child: Text("Plan to visit")),
             ],
           ),
-          ElevatedButton(onPressed: deleteCountry, child: Text("Delete from lists")),
         ],
       ),
     );

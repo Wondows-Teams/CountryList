@@ -70,7 +70,7 @@ class VisitedCountry extends StatelessWidget {
           style: TextStyle(
             fontSize: 30, // agrega un tamaño de fuente de 20 puntos
             fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-            color: Colors.teal, // agrega un color azul para el texto
+            color: Colors.blue, // agrega un color azul para el texto
 
           ),
         ),
@@ -93,7 +93,7 @@ class NotVisitingCountry extends StatelessWidget {
           style: TextStyle(
             fontSize: 30, // agrega un tamaño de fuente de 20 puntos
             fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-            color: Colors.teal, // agrega un color azul para el texto
+            color: Colors.blue, // agrega un color azul para el texto
 
           ),
         ),
@@ -116,7 +116,7 @@ class PlanToVisitCountry extends StatelessWidget {
           style: TextStyle(
             fontSize: 30, // agrega un tamaño de fuente de 20 puntos
             fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
-            color: Colors.teal, // agrega un color azul para el texto
+            color: Colors.blue, // agrega un color azul para el texto
 
           ),
         ),

@@ -13,7 +13,7 @@ class EditProfile extends StatefulWidget {
 
   EditProfile({required this.user});
 
-  User user;
+  Future<User> user;
   File? image;
   @override
   State<EditProfile> createState() => _EditProfile(user: user);
@@ -22,7 +22,7 @@ class EditProfile extends StatefulWidget {
 class _EditProfile extends State<EditProfile> {
   _EditProfile({required this.user});
 
-  User user;
+  Future<User> user;
   TextEditingController tController = TextEditingController();
   String pruebita = "Pruebita";
 
@@ -45,12 +45,13 @@ class _EditProfile extends State<EditProfile> {
   }
 
   void SaveChanges() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      user.name = tController.text;
-      pruebita = tController.text;
+    final prefs = SharedPreferences.getInstance().then((value)
+    {
+      value.setString("name", tController.text);
+      setState(() {
+        user = userByPrefs();
+      });
     });
-    prefs.setString("name", user.name!);
   }
 
   void OpenPictureOption() =>
@@ -58,7 +59,6 @@ class _EditProfile extends State<EditProfile> {
         context: context,
         builder: ((builder) => pictureBottomSheet()),
       );
-
 
 
   Widget pictureBottomSheet(){
@@ -87,18 +87,16 @@ class _EditProfile extends State<EditProfile> {
   }
 
   Future PickImage(ImageSource source) async{
-    final prefs = await SharedPreferences.getInstance();
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      ;
-      setState(() => user.image = image.path);
 
-      if (user.image == null){
-        user.image == "";
-      }
-
-      prefs.setString("image", user.image!);
+      final prefs = SharedPreferences.getInstance().then((value) {
+      value.setString("image", image.path);
+      setState(() {
+        user = userByPrefs();
+      });
+      });
 
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
@@ -155,7 +153,7 @@ class _EditProfile extends State<EditProfile> {
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, /*color: Colors.white70*/),),
+              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
               SizedBox(height: 10,),
               TextField(
                 controller: tController,
@@ -177,31 +175,6 @@ class _EditProfile extends State<EditProfile> {
             ElevatedButton(
                 onPressed: SaveChanges,
                 child: Text("Save changes")
-            ),*/
-            Container(
-              margin: EdgeInsets.all(15),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                        width:8,
-                        color: Colors.teal
-                    ),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 15,
-                  ),
-                  fixedSize: Size(240, 80),
-                ),
-                child: Text("Save changes",
-                  style: TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-                onPressed: SaveChanges,
-              ),
             ),
             Spacer(),
 
@@ -262,5 +235,4 @@ class User {
     name = _name;
     image = _image;
   }
-
 }

@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -29,9 +28,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.teal,
-        scaffoldBackgroundColor: Colors.teal.shade200,
-        secondaryHeaderColor: Colors.tealAccent
+        primarySwatch: Colors.blue,
       ),
       home: MyMain(),
     );
@@ -61,9 +58,8 @@ class _MyMain extends State<MyMain> {
       appBar: AppBar(
 
         title: Text("My Country List"),
-        leading: Image(image: AssetImage("MyCountryList-LOGO.png"),),
       ),
-      //drawer: CustomDrawer(),//Logo aqui
+      drawer: CustomDrawer(),
       body: scenes[index],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
@@ -71,7 +67,7 @@ class _MyMain extends State<MyMain> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              label: "Favourites"
+              label: "Best"
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
