@@ -20,8 +20,15 @@ class _PaisProfile extends State<PaisProfile>{
   void addCountry(String table){
     PaisDatabase bbdd = PaisDatabase.instance;
     bbdd.create(country, table);
+    Navigator.pop(context);
   }
-
+  void deleteCountry(){
+    PaisDatabase bbdd = PaisDatabase.instance;
+    bbdd.delete(country.code, paisesVisitados);
+    bbdd.delete(country.code, paisesNoVisitados);
+    bbdd.delete(country.code, paisesPlan);
+    Navigator.pop(context);
+  }
   void OpenCountryOption() =>
       showModalBottomSheet(
         context: context,
@@ -31,30 +38,28 @@ class _PaisProfile extends State<PaisProfile>{
 
   Widget pictureCountrySheet(){
     return Container(
-      height: 100,
+      height: 230,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          Text("Choose an option"),
+          Text("Add country to list:"),
           SizedBox(height: 20,),
           Row(
             children: [
-              Icon(Icons.camera_alt),
-              TextButton(onPressed: () => addCountry(paisesVisitados) , child: Text("Visited")),
+              TextButton.icon(icon: Icon(Icons.flag_circle),onPressed: () => addCountry(paisesVisitados) , label: Text("Visited")),
             ],
           ),
           Row(
             children: [
-              Icon(Icons.article),
-              TextButton(onPressed: () => addCountry(paisesNoVisitados) , child: Text("Not visiting")),
+              TextButton.icon(icon: Icon(Icons.flag_outlined),onPressed: () => addCountry(paisesNoVisitados) , label: Text("Not visiting")),
             ],
           ),
           Row(
             children: [
-              Icon(Icons.article),
-              TextButton(onPressed: () => addCountry(paisesPlan) , child: Text("Plan to visit")),
+              TextButton.icon(icon: Icon(Icons.flag_circle_outlined),onPressed: () => addCountry(paisesPlan) , label: Text("Plan to visit")),
             ],
           ),
+          ElevatedButton(onPressed: deleteCountry, child: Text("Delete from lists")),
         ],
       ),
     );
@@ -74,8 +79,6 @@ class _PaisProfile extends State<PaisProfile>{
               'AFGHANISTAN',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

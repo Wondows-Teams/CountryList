@@ -43,24 +43,23 @@ class _EditProfile extends State<EditProfile> {
       );
 
 
+
   Widget pictureBottomSheet(){
     return Container(
-      height: 100,
+      height: 150,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          Text("Choose an option"),
+          Text("Where do you want to take the picture from?"),
           SizedBox(height: 20,),
           Row(
             children: [
-              Icon(Icons.camera_alt),
-              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
+              TextButton.icon(icon: Icon(Icons.camera_alt), onPressed: () => PickImage(ImageSource.camera) , label: Text("Camera")),
             ],
           ),
           Row(
             children: [
-              Icon(Icons.article),
-              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
+              TextButton.icon(icon: Icon(Icons.camera_alt), onPressed: () => PickImage(ImageSource.gallery) , label: Text("Gallery")),
             ],
           ),
         ],
@@ -85,6 +84,7 @@ class _EditProfile extends State<EditProfile> {
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
     }
+    Navigator.pop(context);
   }
 
   Widget CustomProfilePicture() {
@@ -195,8 +195,8 @@ class _CustomTextField extends State<CustomTextField>{
 
 
 class User {
-  String? name;
-  String? image;
+  Future<String?> name;
+  Future<String?> image;
 
   User() {
     createPreferences();
@@ -204,11 +204,11 @@ class User {
 
    void createPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    this.name = await prefs.getString("name");
+    this.name =  await prefs.getString("name");
     this.image = await prefs.getString("image");
 
     if(this.name == null){
-      this.name = "User";
+      //this.name = "User";
     }
   }
 
