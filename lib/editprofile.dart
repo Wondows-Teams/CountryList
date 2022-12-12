@@ -13,7 +13,7 @@ class EditProfile extends StatefulWidget {
 
   EditProfile({required this.user});
 
-  User user;
+  Future<User> user;
   File? image;
   @override
   State<EditProfile> createState() => _EditProfile(user: user);
@@ -22,18 +22,36 @@ class EditProfile extends StatefulWidget {
 class _EditProfile extends State<EditProfile> {
   _EditProfile({required this.user});
 
-  User user;
+  Future<User> user;
   TextEditingController tController = TextEditingController();
   String pruebita = "Pruebita";
 
+  @override
+  void initState() {
+    super.initState();
+    iniciarUsuario();
+  }
+
+  void iniciarUsuario(){
+      user = userByPrefs();
+  }
+
+  Future<User> userByPrefs() async{
+    String? auxName,auxImage;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    auxName = prefs.getString("name")!;
+    auxImage = prefs.getString("image")!;
+    return User(auxName, auxImage);
+  }
 
   void SaveChanges() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      user.name = tController.text;
-      pruebita = tController.text;
+    final prefs = SharedPreferences.getInstance().then((value)
+    {
+      value.setString("name", tController.text);
+      setState(() {
+        user = userByPrefs();
+      });
     });
-    prefs.setString("name", user.name!);
   }
 
   void OpenPictureOption() =>
@@ -69,18 +87,16 @@ class _EditProfile extends State<EditProfile> {
   }
 
   Future PickImage(ImageSource source) async{
-    final prefs = await SharedPreferences.getInstance();
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
-      ;
-      setState(() => user.image = image.path);
 
-      if (user.image == null){
-        user.image == "";
-      }
-
-      prefs.setString("image", user.image!);
+      final prefs = SharedPreferences.getInstance().then((value) {
+      value.setString("image", image.path);
+      setState(() {
+        user = userByPrefs();
+      });
+      });
 
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
@@ -90,9 +106,17 @@ class _EditProfile extends State<EditProfile> {
   Widget CustomProfilePicture() {
     return Stack(
       children: [
-        user.image != null
-            ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
-            : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
+        FutureBuilder(
+          future: user,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ClipOval(child: Image.file(File(snapshot.data!.image!) , width: 160, height: 160, fit: BoxFit.cover));
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            return ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover));
+          },
+        ),
         Positioned(
           child: FloatingActionButton(
             onPressed: OpenPictureOption,
@@ -111,7 +135,7 @@ class _EditProfile extends State<EditProfile> {
       appBar: AppBar(
         title: Text("Edit Profile"),
         leading: BackButton(
-          onPressed: () => Navigator.pop(context, user),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
 
@@ -137,7 +161,17 @@ class _EditProfile extends State<EditProfile> {
             ],
           ),
             Spacer(),
-            Text(user.name!),
+            FutureBuilder(
+              future: user,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data!.name!);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                return Text("User");
+              },
+            ),
             ElevatedButton(
                 onPressed: SaveChanges,
                 child: Text("Save changes")
@@ -195,21 +229,10 @@ class _CustomTextField extends State<CustomTextField>{
 
 
 class User {
-  String? name;
-  String? image;
-
-  User() {
-    createPreferences();
+  late String? name;
+  late String? image;
+  User(String?_name, String? _image){
+    name = _name;
+    image = _image;
   }
-
-   void createPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
-    this.name = await prefs.getString("name");
-    this.image = await prefs.getString("image");
-
-    if(this.name == null){
-      this.name = "User";
-    }
-  }
-
 }

@@ -14,7 +14,7 @@ class ListaPaisesPrincipal extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ListaPaises(["ESP", "BR", "AFG"], false),
+      home: ListaPaises([], false),
     );
   }
 }
@@ -38,15 +38,6 @@ class _listaPaises extends State<ListaPaises>{
   void initState() {
     super.initState();
     _fetchPaises();
-    bbdd.create(Pais(ranking: 5, code: "ESP"), "favs");
-    bbdd.create(Pais(ranking: 5, code: "BRA"), "planned");
-    bbdd.create(Pais(ranking: 5, code: "JPN"), "visited");
-    bbdd.create(Pais(ranking: 5, code: "JAM"), "visited");
-    bbdd.create(Pais(ranking: 5, code: "JEY"), "notVisited");
-    bbdd.create(Pais(ranking: 10, code: "ESP"), paisesRanking);
-    bbdd.create(Pais(ranking: 0, code: "FRA"), paisesRanking);
-    bbdd.create(Pais(ranking: 6, code: "JEY"), paisesRanking);
-    bbdd.read("ESP", "favs").then((value) => debugPrint(value.ranking.toString()));
   }
 
   _fetchPaises() async {
@@ -121,7 +112,7 @@ class _listaPaises extends State<ListaPaises>{
           itemCount: auxList.length,
           itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PaisProfile())),
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => PaisProfile(auxList[index]!))),
               child: Padding(padding: EdgeInsets.all(5),
             child: Card(
               elevation: 5, // agrega una sombra debajo de la tarjeta

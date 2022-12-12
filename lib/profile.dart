@@ -4,7 +4,10 @@ import 'package:countrylist/mycountrylist.dart';
 import 'package:countrylist/stats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:countrylist/editprofile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'editprofile.dart';
+
 
 class MyProfile extends StatefulWidget {
 
@@ -15,14 +18,21 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfile extends State<MyProfile>{
 
-  User user = User();
+  late Future<User> user;
 
   @override
   void initState() {
-    user = User();
     super.initState();
+    user = userByPrefs();
   }
 
+  Future<User> userByPrefs() async{
+    String? auxName,auxImage;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+      auxName = prefs.getString("name")!;
+      auxImage = prefs.getString("image")!;
+    return User(auxName, auxImage);
+  }
 
 
   @override
@@ -37,18 +47,27 @@ class _MyProfile extends State<MyProfile>{
     }
 
     void toEditPage() async {
-        final newUser = await Navigator.push(context,
-            MaterialPageRoute(builder: (context) => EditProfile(user: user,)));
-        setState(() => this.user = newUser);
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile(user: user,)));
+        setState(() {
+          user = userByPrefs();
+        });
     }
 
 
     Widget CustomProfilePicture() {
       return Stack(
         children: [
-          user.image != null
-              ? ClipOval(child: Image.file(File(user.image!) , width: 160, height: 160, fit: BoxFit.cover),)
-              : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
+          FutureBuilder(
+            future: user,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return ClipOval(child: Image.file(File(snapshot.data!.image!) , width: 160, height: 160, fit: BoxFit.cover));
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover));
+            },
+          ),
           Positioned(
             child: FloatingActionButton(
               onPressed: toEditPage,
@@ -74,9 +93,17 @@ class _MyProfile extends State<MyProfile>{
           Spacer(),
           CustomProfilePicture(),
           Spacer(),
-          user.name != null
-              ? Text(user.name!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30))
-              : Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+          FutureBuilder(
+            future: user,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.name!, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
+            },
+          ),
 
           Spacer(),
           Row(

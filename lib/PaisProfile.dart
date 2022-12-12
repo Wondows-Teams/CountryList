@@ -1,17 +1,29 @@
+import 'dart:ffi';
+
 import 'package:countrylist/dataModel.dart';
 import 'package:countrylist/database.dart';
 import 'package:flutter/material.dart';
 
+import 'PaisAPI.dart';
+
 class PaisProfile extends StatefulWidget {
 
-  @override
-  State<PaisProfile> createState() => _PaisProfile();
+  late PaisAPI country;
 
+  @override
+  State<PaisProfile> createState() => _PaisProfile(country);
+
+  PaisProfile(PaisAPI _country){
+    this.country = _country;
+  }
 }
 
 class _PaisProfile extends State<PaisProfile>{
 
-  Pais country = Pais(ranking: 0, code: "AFG");
+  late PaisAPI country;
+  _PaisProfile(PaisAPI _country){
+    this.country = _country;
+  }
 
   void toAddCountry(){
     OpenCountryOption();
@@ -19,7 +31,7 @@ class _PaisProfile extends State<PaisProfile>{
 
   void addCountry(String table){
     PaisDatabase bbdd = PaisDatabase.instance;
-    bbdd.create(country, table);
+    bbdd.create(Pais(ranking: -1, code: country.alpha3Code!), table);
   }
 
   void OpenCountryOption() =>
@@ -71,7 +83,7 @@ class _PaisProfile extends State<PaisProfile>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'AFGHANISTAN',
+              country.name!,
               style: Theme.of(context).textTheme.headlineMedium,
             ),
 
@@ -86,52 +98,69 @@ class _PaisProfile extends State<PaisProfile>{
                       Icons.star,
                       color: Colors.blue,
                     ),
-                    const Text('7.5'),
+                     FutureBuilder(
+                      future: rating(country.alpha3Code!),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            "Rating: " + snapshot.data!,
+                            style: TextStyle(
+                              fontSize: 18, // agrega un tamaño de fuente de 18 puntos
+                              fontWeight: FontWeight.bold, // agrega un estilo de fuente en negrita
+                              color: Colors.green, // agrega un color verde para el texto
+                            ),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text("${snapshot.error}");
+                        }
+                        return Center(
+                            child: CircularProgressIndicator());
+                      },
+                    ),
                   ],
                 ),
-                Icon( //Image flags
-                  Icons.rectangle,
-                  color: Colors.red,
-                  size: 50.0,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child:  Image.network(country.flags.png!, fit: BoxFit.cover, scale: 3,),
                 ),
-                const Text(
-                  'AFG',
-                ),
-              ],
-            ),
-
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                const Text(
-                  'Capital: Kabul',
-                ),
-                const Text(
-                  'Población: 40218234',
+                Text(
+                  country.alpha3Code!,
                 ),
               ],
             ),
 
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text(
-                  'Continente: Asia',
+                Text(
+                  'Capital: ' + country.capital!,
                 ),
-                const Text(
-                  'Región: Southern Asia',
+                Text(
+                  'Población: ' + country.population!.toString(),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                 Text(
+                  'Continente: ' + country.region!.toString(),
+                ),
+                 Text(
+                  'Región: ' + country.subregion!,
                 ),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Text(
-                  'Timezone: UTC+04:30',
+                 Text(
+                  'Timezone: ' + country.timezones![0],
                 ),
-                const Text(
-                  'Area: 652230.0',
+                 Text(
+                  'Area: 652230.0' + country.area!.toString(),
                 ),
               ],
             ),
@@ -144,5 +173,20 @@ class _PaisProfile extends State<PaisProfile>{
         child: const Icon(Icons.add_chart),
       ),
     );
+  }
+
+  Future<String> rating(String codigo) async{
+    late int rating;
+    PaisDatabase bbdd = PaisDatabase.instance;
+    await bbdd.read(codigo, "ranking").then(
+            (value) {
+          rating = value.ranking;
+        }
+    );
+    if(rating == -1){
+      return "No ranked";
+    }else{
+      return rating.toString() + "/10";
+    }
   }
 }
