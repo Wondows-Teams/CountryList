@@ -19,14 +19,15 @@ class EditProfile extends StatefulWidget {
   State<EditProfile> createState() => _EditProfile(user: user);
 }
 
-class _EditProfile extends State<EditProfile>{
+class _EditProfile extends State<EditProfile> {
   _EditProfile({required this.user});
+
   User user;
   TextEditingController tController = TextEditingController();
   String pruebita = "Pruebita";
 
 
-  void SaveChanges() async{
+  void SaveChanges() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       user.name = tController.text;
@@ -35,16 +36,37 @@ class _EditProfile extends State<EditProfile>{
     prefs.setString("name", user.name!);
   }
 
-  void OpenDialog() => showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Where do you want to take the picture from?"),
-        actions: [
-          TextButton(onPressed: () => PickImage(ImageSource.gallery), child: Text("Gallery")),
-          TextButton(onPressed: () => PickImage(ImageSource.camera), child: Text("Camera")),
+  void OpenPictureOption() =>
+      showModalBottomSheet(
+        context: context,
+        builder: ((builder) => pictureBottomSheet()),
+      );
+
+
+  Widget pictureBottomSheet(){
+    return Container(
+      height: 100,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          Text("Choose an option"),
+          SizedBox(height: 20,),
+          Row(
+            children: [
+              Icon(Icons.camera_alt),
+              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.article),
+              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
+            ],
+          ),
         ],
       ),
-  );
+    );
+  }
 
   Future PickImage(ImageSource source) async{
     final prefs = await SharedPreferences.getInstance();
@@ -73,7 +95,7 @@ class _EditProfile extends State<EditProfile>{
             : ClipOval(child: Image(image: AssetImage("assets/Eliwood.jpg"), width: 160, height: 160, fit: BoxFit.cover)),
         Positioned(
           child: FloatingActionButton(
-            onPressed: OpenDialog,
+            onPressed: OpenPictureOption,
             child: Icon(Icons.add_a_photo),
           ),
           right: 0,

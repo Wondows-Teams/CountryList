@@ -1,3 +1,5 @@
+import 'package:countrylist/dataModel.dart';
+import 'package:countrylist/database.dart';
 import 'package:flutter/material.dart';
 
 class PaisProfile extends StatefulWidget {
@@ -9,8 +11,53 @@ class PaisProfile extends StatefulWidget {
 
 class _PaisProfile extends State<PaisProfile>{
 
-  void toAddCountry(){
+  Pais country = Pais(ranking: 0, code: "AFG");
 
+  void toAddCountry(){
+    OpenCountryOption();
+  }
+
+  void addCountry(String table){
+    PaisDatabase bbdd = PaisDatabase.instance;
+    bbdd.create(country, table);
+  }
+
+  void OpenCountryOption() =>
+      showModalBottomSheet(
+        context: context,
+        builder: ((builder) => pictureCountrySheet()),
+      );
+
+
+  Widget pictureCountrySheet(){
+    return Container(
+      height: 100,
+      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          Text("Choose an option"),
+          SizedBox(height: 20,),
+          Row(
+            children: [
+              Icon(Icons.camera_alt),
+              TextButton(onPressed: () => addCountry(paisesVisitados) , child: Text("Visited")),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.article),
+              TextButton(onPressed: () => addCountry(paisesNoVisitados) , child: Text("Not visiting")),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.article),
+              TextButton(onPressed: () => addCountry(paisesPlan) , child: Text("Plan to visit")),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -98,6 +145,4 @@ class _PaisProfile extends State<PaisProfile>{
       ),
     );
   }
-
-
 }

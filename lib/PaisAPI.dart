@@ -2,7 +2,7 @@
 //
 //     final pais = paisFromJson(jsonString);
 
-import 'package:meta/meta.dart';
+import    'package:meta/meta.dart';
 import 'dart:convert';
 
 List<PaisAPI> paisFromJson(String str) => List<PaisAPI>.from(json.decode(str).map((x) => PaisAPI.fromJson(x)));
