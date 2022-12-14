@@ -195,8 +195,8 @@ class _CustomTextField extends State<CustomTextField>{
 
 
 class User {
-  Future<String?> name;
-  Future<String?> image;
+  String? name;
+  String? image;
 
   User() {
     createPreferences();
@@ -208,7 +208,7 @@ class User {
     this.image = await prefs.getString("image");
 
     if(this.name == null){
-      //this.name = "User";
+      this.name = "User";
     }
   }
 
