@@ -153,7 +153,7 @@ class _EditProfile extends State<EditProfile> {
             physics: BouncingScrollPhysics(),
             shrinkWrap: true,
             children: [
-              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+              Text("Username" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, /*color: Colors.white70*/),),
               SizedBox(height: 10,),
               TextField(
                 controller: tController,
@@ -169,12 +169,36 @@ class _EditProfile extends State<EditProfile> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
-                return Text("User");
+                return Text("User",
+                    style: TextStyle(
+                    fontSize: 20,)
+                );
               },
             ),
-            ElevatedButton(
+            Container(
+              margin: EdgeInsets.all(15),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                        width:8,
+                        color: Colors.teal
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 15,
+                    horizontal: 15,
+                  ),
+                  fixedSize: Size(240, 80),
+                ),
+                child: Text("Save changes",
+                  style: TextStyle(
+                    fontSize: 25,
+                  ),
+                ),
                 onPressed: SaveChanges,
-                child: Text("Save changes")
+              ),
             ),
             Spacer(),
 
