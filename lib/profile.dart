@@ -108,6 +108,7 @@ class _MyProfile extends State<MyProfile>{
               return Text("User", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30));
             },
           ),
+
           Spacer(),
 
           Container(

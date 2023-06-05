@@ -63,20 +63,22 @@ class _EditProfile extends State<EditProfile> {
 
   Widget pictureBottomSheet(){
     return Container(
-      height: 150,
+      height: 100,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          Text("Where do you want to take the picture from?"),
+          Text("Choose an option"),
           SizedBox(height: 20,),
           Row(
             children: [
-              TextButton.icon(icon: Icon(Icons.camera_alt), onPressed: () => PickImage(ImageSource.camera) , label: Text("Camera")),
+              Icon(Icons.camera_alt),
+              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
             ],
           ),
           Row(
             children: [
-              TextButton.icon(icon: Icon(Icons.camera_alt), onPressed: () => PickImage(ImageSource.gallery) , label: Text("Gallery")),
+              Icon(Icons.article),
+              TextButton(onPressed: () => PickImage(ImageSource.gallery) , child: Text("Gallery")),
             ],
           ),
         ],
@@ -99,7 +101,6 @@ class _EditProfile extends State<EditProfile> {
     } on PlatformException catch (e) {
       print("Failed to pick image: $e");
     }
-    Navigator.pop(context);
   }
 
   Widget CustomProfilePicture() {
@@ -168,6 +169,7 @@ class _EditProfile extends State<EditProfile> {
                 } else if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 }
+
                 return Text("User",
                     style: TextStyle(
                     fontSize: 20,)
@@ -196,6 +198,7 @@ class _EditProfile extends State<EditProfile> {
                     fontSize: 25,
                   ),
                 ),
+
                 onPressed: SaveChanges,
               ),
             ),
@@ -272,3 +275,4 @@ class User {
   }
 }
 
+n

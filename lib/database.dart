@@ -111,24 +111,24 @@ class PaisDatabase{
   }
 
   ///Actualiza la entrada de la DB que tenga el mismo código, reemplazandola
-  Future<int> update(Pais pais, String table) async{
+  Future<int> update(Pais pais) async{
     final db = await instance.database;
 
     return db.update(
-      table,
+      paisesFavs,
       pais.toJson(),
-      where: '${atributosPais.code} = ?',
+      where: '${atributosPais} = ?',
       whereArgs: [pais.code],
     );
   }
 
   ///Elimina la entrada de la DB que tenga el código condicado
-  Future<int> delete(String code, String table) async{
+  Future<int> delete(String code) async{
     final db = await instance.database;
 
     return await db.delete(
-      table,
-      where: '${atributosPais.code} = ?',
+      paisesFavs,
+      where: '${atributosPais} = ?',
       whereArgs: [code],
     );
   }
