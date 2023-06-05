@@ -123,12 +123,12 @@ class PaisDatabase{
   }
 
   ///Elimina la entrada de la DB que tenga el código condicado
-  Future<int> delete(String code) async{
+  Future<int> delete(String code, String table) async{
     final db = await instance.database;
 
     return await db.delete(
-      paisesFavs,
-      where: '${atributosPais} = ?',
+      table,
+      where: '${atributosPais.code} = ?',
       whereArgs: [code],
     );
   }
