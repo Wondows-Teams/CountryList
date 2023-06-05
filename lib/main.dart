@@ -71,7 +71,7 @@ class _MyMain extends State<MyMain> {
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              label: "Best"
+              label: "Favourites"
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
