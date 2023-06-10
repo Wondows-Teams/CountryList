@@ -48,6 +48,7 @@ class _PaisProfile extends State<PaisProfile> {
     bbdd.delete(country.alpha3Code!, paisesVisitados);
     bbdd.delete(country.alpha3Code!, paisesNoVisitados);
     bbdd.delete(country.alpha3Code!, paisesPlan);
+    bbdd.delete(country.alpha3Code!, paisesFavs);
     Navigator.pop(context);
   }
 
@@ -96,6 +97,7 @@ class _PaisProfile extends State<PaisProfile> {
       print("Ranking no actualizado. Tabla no encontrada");
     }
   }
+
   void OpenRatingOption() =>
       showModalBottomSheet(
         context: context,
@@ -114,10 +116,15 @@ class _PaisProfile extends State<PaisProfile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Container(
-              height: 250,
+              height: 200,
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Column(
                 children: [
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text("Indicate the rating of this country"),
+                  ),
+                  Spacer(),
                   RatingBar.builder(
                     initialRating: snapshot.data!,
                     minRating: 0,
@@ -134,6 +141,7 @@ class _PaisProfile extends State<PaisProfile> {
                       updateRating(newRating.toInt());
                     },
                   ),
+                  Spacer(),
                   ElevatedButton(
                       onPressed: () => Navigator.pop(context), child: Text("Go Back")),
                 ],
@@ -150,7 +158,7 @@ class _PaisProfile extends State<PaisProfile> {
 
   Widget pictureCountrySheet() {
     return Container(
-      height: 230,
+      height: 280,
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
@@ -205,10 +213,10 @@ class _PaisProfile extends State<PaisProfile> {
               //color: Colors.teal.shade900,
             ),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                    onPressed: toAddRating, child: Text("Rate this country!")),
                 Card(
+
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
@@ -332,6 +340,11 @@ class _PaisProfile extends State<PaisProfile> {
                     ),
                   ),
                 ),
+                Padding(
+                    padding: EdgeInsets.only(top: 40.0),
+                    child: ElevatedButton(
+                        onPressed: toAddRating, child: Text("Rate this country!")),
+                ),
               ],
             )
         ),
@@ -347,13 +360,46 @@ class _PaisProfile extends State<PaisProfile> {
 
 
   Future<String> ratingString(String codigo) async {
-    late int ratingS;
+    late int ratingS = -1;
     PaisDatabase bbdd = PaisDatabase.instance;
-    await bbdd.read(codigo, paisesVisitados).then(
-            (value) {
-          ratingS = value.ranking;
-        }
-    );
+    bool exists;
+
+    exists = await bbdd.readRanking(codigo, paisesFavs);
+    if (exists){
+      await bbdd.read(codigo, paisesFavs).then(
+              (value) {
+            ratingS = value.ranking;
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(codigo, paisesVisitados);
+    if (exists){
+      await bbdd.read(codigo, paisesVisitados).then(
+              (value) {
+            ratingS = value.ranking;
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(codigo!, paisesNoVisitados);
+    if (exists){
+      await bbdd.read(codigo, paisesNoVisitados).then(
+              (value) {
+            ratingS = value.ranking;
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(codigo, paisesPlan);
+    if (exists){
+      await bbdd.read(codigo, paisesPlan).then(
+              (value) {
+            ratingS = value.ranking;
+          }
+      );
+    }
+
     if (ratingS == -1) {
       return "Not ranked";
     } else if (ratingS >= 5) {
@@ -366,13 +412,46 @@ class _PaisProfile extends State<PaisProfile> {
 
 
   Future<double> ratingDouble(String code) async {
-    late double ratingD;
+    late double ratingD = -1;
     PaisDatabase bbdd = PaisDatabase.instance;
-    await bbdd.read(code, paisesVisitados).then(
-            (value) {
-          ratingD = value.ranking.toDouble();
-        }
-    );
+    bool exists;
+
+    exists = await bbdd.readRanking(country.alpha3Code!, paisesFavs);
+    if (exists){
+      await bbdd.read(code, paisesFavs).then(
+              (value) {
+            ratingD = value.ranking.toDouble();
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(country.alpha3Code!, paisesNoVisitados);
+    if (exists){
+      await bbdd.read(code, paisesVisitados).then(
+              (value) {
+            ratingD = value.ranking.toDouble();
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(country.alpha3Code!, paisesVisitados);
+    if (exists){
+      await bbdd.read(code, paisesNoVisitados).then(
+              (value) {
+            ratingD = value.ranking.toDouble();
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(country.alpha3Code!, paisesPlan);
+    if (exists){
+      await bbdd.read(code, paisesPlan).then(
+              (value) {
+            ratingD = value.ranking.toDouble();
+          }
+      );
+    }
+
     if (ratingD == -1) {
       return 0;
     } else if (ratingD >= 5) {

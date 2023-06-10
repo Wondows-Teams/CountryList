@@ -55,6 +55,7 @@ class _listaPaises extends State<ListaPaises>{
   }
 
   Widget build(BuildContext context) {
+    _fetchPaises();
     return Column(
       children: [
         TextField(
@@ -197,16 +198,52 @@ class _listaPaises extends State<ListaPaises>{
   }
 
   Future<String> rating(String codigo) async{
-    late int rating;
+    late int rating = -1;
     PaisDatabase bbdd = PaisDatabase.instance;
-    await bbdd.read(codigo, "ranking").then(
+    bool exists;
+
+    exists = await bbdd.readRanking(codigo, paisesFavs);
+    if (exists){
+      await bbdd.read(codigo, paisesFavs).then(
               (value) {
             rating = value.ranking;
           }
       );
-    if(rating == -1){
+    }
+
+    exists = await bbdd.readRanking(codigo, paisesVisitados);
+    if (exists){
+      await bbdd.read(codigo, paisesVisitados).then(
+              (value) {
+            rating = value.ranking;
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(codigo, paisesNoVisitados);
+    if (exists){
+      await bbdd.read(codigo, paisesNoVisitados).then(
+              (value) {
+            rating = value.ranking;
+          }
+      );
+    }
+
+    exists = await bbdd.readRanking(codigo, paisesPlan);
+    if (exists){
+      await bbdd.read(codigo, paisesPlan).then(
+              (value) {
+            rating = value.ranking;
+          }
+      );
+    }
+
+    if (rating == -1) {
       return "Not ranked";
-    }else{
+    } else if (rating >= 5) {
+      return "5/5";
+    }
+    else {
       return rating.toString() + "/5";
     }
   }

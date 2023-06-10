@@ -91,7 +91,7 @@ List<String> codigosTop(){
   PaisDatabase bbdd = PaisDatabase.instance;
   List<String> codigos = [];
   List<Pais> paises = [];
-  bbdd.readAll("favs").then(
+  bbdd.readAll(paisesFavs).then(
           (value) {
             paises = value;
             paises.forEach((element) {
