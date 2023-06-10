@@ -61,7 +61,7 @@ class _MyMain extends State<MyMain> {
       appBar: AppBar(
 
         title: Text("My Country List"),
-        leading: Image(image: AssetImage("MyCountryList.png"),),
+        leading: Image(image: AssetImage("assets/MyCountryList.png"),),
       ),
       //drawer: CustomDrawer(),//Logo aqui
       body: scenes[index],

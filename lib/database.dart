@@ -97,7 +97,24 @@ class PaisDatabase{
     if (maps.isNotEmpty){
       return Pais.fromJson(maps.first);
     }else{
-      return new Pais(ranking: -1, code: code);
+      return await new Pais(ranking: -1, code: code);
+    }
+  }
+
+  Future<bool> readRanking(String code, String table) async{
+    final db = await instance.database;
+
+    final maps = await db.query(
+      table,
+      columns: atributosPais.values,
+      where: '${atributosPais.code} = ?',
+      whereArgs: [code],
+    );
+
+    if (maps.isNotEmpty){
+      return true;
+    } else{
+      return false;
     }
   }
 
@@ -111,13 +128,12 @@ class PaisDatabase{
   }
 
   ///Actualiza la entrada de la DB que tenga el mismo código, reemplazandola
-  Future<int> update(Pais pais) async{
+  Future<int> update(Pais pais, String table) async{
     final db = await instance.database;
-
-    return db.update(
-      paisesFavs,
+    return await db.update(
+      table,
       pais.toJson(),
-      where: '${atributosPais} = ?',
+      where: '${atributosPais.code} = ?',
       whereArgs: [pais.code],
     );
   }

@@ -205,9 +205,9 @@ class _listaPaises extends State<ListaPaises>{
           }
       );
     if(rating == -1){
-      return "No ranked";
+      return "Not ranked";
     }else{
-      return rating.toString() + "/10";
+      return rating.toString() + "/5";
     }
   }
 
