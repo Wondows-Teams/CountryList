@@ -164,7 +164,7 @@ class _MyProfile extends State<MyProfile>{
                 ),
                 fixedSize: Size(240, 80),
               ),
-              child: Text("Your Stats",
+              child: Text("Your World Map",
                 style: TextStyle(
                   fontSize: 25,
                 ),
