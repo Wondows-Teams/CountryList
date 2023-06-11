@@ -15,9 +15,6 @@ class MyCountryList extends StatefulWidget {
 
 class _MyCountryList extends State<MyCountryList>{
 
-  void toEditScreen(){
-
-  }
 
   @override
   Widget build (BuildContext context){
@@ -37,11 +34,6 @@ class _MyCountryList extends State<MyCountryList>{
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: toEditScreen,
-            child: Icon(Icons.edit_note),
-          ),
-
           body: Center(
             // Center is a layout widget. It takes a single child and positions it
             // in the middle of the parent.

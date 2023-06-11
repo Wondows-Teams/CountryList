@@ -314,7 +314,7 @@ class _PaisProfile extends State<PaisProfile> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                'Continente: ' + country.region!.toString(),
+                                'Continente: ' + country.region!.name.toString(),
                               ),
                               Text(
                                 'Región: ' + country.subregion!.toString(),
@@ -331,7 +331,7 @@ class _PaisProfile extends State<PaisProfile> {
                                 'Timezone: ' + country.timezones![0],
                               ),
                               Text(
-                                'Area:' + country.area!.toString(),
+                                'Area: ' + country.area!.toString() + " km",
                               ),
                             ],
                           ),
