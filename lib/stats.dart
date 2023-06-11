@@ -52,19 +52,19 @@ class _MyStats extends State<MyStats> {
 
     //Busqueda de en la tabla de favoritos
     if (codigosFavsAux.contains(countryCode)) {
-      return Colors.green;
+      return Colors.amber;
     }
     if (codigosNoVisitadosAux.contains(countryCode)) {
-      return Colors.amber;
+      return Colors.red;
     }
     if (codigosPlanAux.contains(countryCode)) {
       return Colors.lightBlueAccent;
     }
     if (codigosRankingAux.contains(countryCode)) {
-      return Colors.red;
+      return Colors.purple;
     }
     if (codigosVisitadosAux.contains(countryCode)) {
-      return Colors.purpleAccent;
+      return Colors.green;
     }
     return Colors.grey;
   }

@@ -160,21 +160,6 @@ class _EditProfile extends State<EditProfile> {
             ],
           ),
             Spacer(),
-            FutureBuilder(
-              future: user,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text(snapshot.data!.name!);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-
-                return Text("User",
-                    style: TextStyle(
-                    fontSize: 20,)
-                );
-              },
-            ),
             Container(
               margin: EdgeInsets.all(15),
               child: ElevatedButton(
