@@ -229,7 +229,23 @@ class _MyStats extends State<MyStats> {
                 return Center(
                     child: CircularProgressIndicator());
               },
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text("Visited countries: " ,),  Icon(Icons.rectangle, color: Colors.green, size: 20.0),],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text("Not visiting countries: "),  Icon(Icons.rectangle, color: Colors.red, size: 20.0),],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text("Favourite countries: "),  Icon(Icons.rectangle, color: Colors.amber, size: 20.0),],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text("Plan to visit countries: "),  Icon(Icons.rectangle, color: Colors.lightBlueAccent, size: 20.0),],
+            ),
           ],
         ),
       ),
