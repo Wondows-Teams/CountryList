@@ -20,8 +20,8 @@ class ListaPaisesPrincipal extends StatelessWidget {
 }
 
 class ListaPaises extends StatefulWidget {
-  late final List<String> codPaisesFiltro;
-  late final bool filtroActivo;
+  late List<String> codPaisesFiltro;
+  late bool filtroActivo;
   ListaPaises(List<String> list, bool activo){
     codPaisesFiltro = list;
     filtroActivo = activo;
@@ -100,7 +100,7 @@ class _listaPaises extends State<ListaPaises>{
             shrinkWrap: true,
             itemCount: 1,
             itemBuilder: (context, index) {
-              return Text("No se han encontrado países que cumplan los requisitos");
+              return Text("");
             },
           );
         }

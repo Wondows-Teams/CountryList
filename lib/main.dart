@@ -55,6 +55,17 @@ class _MyMain extends State<MyMain> {
     ListaPaises([], false),
     MyProfile(),
   ];
+
+
+  int actualizarPaises(int index){
+    List<String> actualizado = codigosTop();
+    
+    ListaPaises listaActualizada = scenes[0] as ListaPaises;
+    listaActualizada.codPaisesFiltro = codigosTop();
+    
+    return index;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +78,11 @@ class _MyMain extends State<MyMain> {
       body: scenes[index],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: index,
-        onTap: (index) => setState(() => this.index = index),
+        onTap: (index) => setState(() => this.index = actualizarPaises(index)),
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.star),
-              label: "Best"
+              label: "Best",
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -101,6 +112,7 @@ List<String> codigosTop(){
   );
   return codigos;
 }
+
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});

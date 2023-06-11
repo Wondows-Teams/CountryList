@@ -127,7 +127,6 @@ class PlanToVisitCountry extends StatelessWidget {
     );
   }
 }
-
 List<String> listaCodigos(String tabla){
   PaisDatabase bbdd = PaisDatabase.instance;
   List<String> codigos = [];
